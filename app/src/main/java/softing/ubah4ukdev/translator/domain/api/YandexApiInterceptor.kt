@@ -20,10 +20,18 @@ import softing.ubah4ukdev.translator.BuildConfig
  *   v1.0
  */
 object YandexApiInterceptor : Interceptor {
-    private var responseCode: Int = 0
-
     private const val USER_NAME = "demo"
     private const val HEADER_NAME = "Authorization"
+
+    private const val CODE_UNDEFINED_ERROR = 0
+    private const val CODE_INFO = 1
+    private const val CODE_SUCCESS = 2
+    private const val CODE_REDIRECTION = 3
+    private const val CODE_CLIENT_ERROR = 4
+    private const val CODE_SERVER_ERROR = 5
+    private const val RESPONSE_CODE_DIVIDER = 100
+
+    var responseCode: Int = CODE_UNDEFINED_ERROR
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(
@@ -40,23 +48,22 @@ object YandexApiInterceptor : Interceptor {
     }
 
     fun getResponseCode(): ServerResponseStatusCode {
-        var statusCode = ServerResponseStatusCode.UNDEFINED_ERROR
-        when (responseCode / 100) {
-            1 -> statusCode = ServerResponseStatusCode.INFO
-            2 -> statusCode = ServerResponseStatusCode.SUCCESS
-            3 -> statusCode = ServerResponseStatusCode.REDIRECTION
-            4 -> statusCode = ServerResponseStatusCode.CLIENT_ERROR
-            5 -> statusCode = ServerResponseStatusCode.SERVER_ERROR
+        return when (responseCode / RESPONSE_CODE_DIVIDER) {
+            CODE_INFO -> ServerResponseStatusCode.INFO
+            CODE_SUCCESS -> ServerResponseStatusCode.SUCCESS
+            CODE_REDIRECTION -> ServerResponseStatusCode.REDIRECTION
+            CODE_CLIENT_ERROR -> ServerResponseStatusCode.CLIENT_ERROR
+            CODE_SERVER_ERROR -> ServerResponseStatusCode.SERVER_ERROR
+            else -> ServerResponseStatusCode.UNDEFINED_ERROR
         }
-        return statusCode
     }
 
     enum class ServerResponseStatusCode {
+        UNDEFINED_ERROR,
         INFO,
         SUCCESS,
         REDIRECTION,
         CLIENT_ERROR,
-        SERVER_ERROR,
-        UNDEFINED_ERROR
+        SERVER_ERROR
     }
 }

@@ -19,7 +19,6 @@ import softing.ubah4ukdev.translator.domain.model.DictionaryResult
  *   v1.0
  */
 class CacheDataSourceImpl : ICacheDataSource {
-    override fun getData(word: String): Observable<DictionaryResult> {
-        TODO("Not yet implemented")
-    }
+    override fun getData(word: String): Observable<DictionaryResult> =
+        Observable.empty()
 }
