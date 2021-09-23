@@ -1,10 +1,9 @@
 package softing.ubah4ukdev.translator.view.base
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import softing.ubah4ukdev.translator.R
 import softing.ubah4ukdev.translator.domain.model.AppState
-import softing.ubah4ukdev.translator.presenter.IPresenter
+import softing.ubah4ukdev.translator.viewmodel.BaseViewModel
 
 /**
  *   Project: Translator
@@ -20,26 +19,9 @@ import softing.ubah4ukdev.translator.presenter.IPresenter
  *
  *   v1.0
  */
-abstract class BaseActivity<T : AppState> : AppCompatActivity(R.layout.activity_main), IView {
+abstract class BaseActivity<T : AppState> : AppCompatActivity(R.layout.activity_main) {
 
-    protected lateinit var presenter: IPresenter<T, IView>
+    abstract val model: BaseViewModel<T>
 
-    protected abstract fun createPresenter(): IPresenter<T, IView>
-
-    abstract override fun renderData(appState: AppState)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        presenter = createPresenter()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        presenter.attachView(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        presenter.detachView(this)
-    }
+    abstract fun renderData(appState: T)
 }

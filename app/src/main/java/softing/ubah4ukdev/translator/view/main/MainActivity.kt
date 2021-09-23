@@ -9,21 +9,24 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import softing.ubah4ukdev.translator.R
 import softing.ubah4ukdev.translator.databinding.ActivityMainBinding
 import softing.ubah4ukdev.translator.domain.model.AppState
 import softing.ubah4ukdev.translator.domain.model.DictionaryEntry
-import softing.ubah4ukdev.translator.extensions.showSnakeBar
-import softing.ubah4ukdev.translator.presenter.IPresenter
 import softing.ubah4ukdev.translator.view.base.BaseActivity
-import softing.ubah4ukdev.translator.view.base.IView
 import softing.ubah4ukdev.translator.view.main.adapter.WordAdapter
 
 class MainActivity : BaseActivity<AppState>(), WordAdapter.Delegate {
 
     private val binding: ActivityMainBinding by viewBinding()
+
+    override val model: MainViewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
+    }
 
     private val adapter by lazy { WordAdapter(this) }
 
@@ -46,9 +49,7 @@ class MainActivity : BaseActivity<AppState>(), WordAdapter.Delegate {
         override fun afterTextChanged(s: Editable) {}
     }
 
-    override fun createPresenter(): IPresenter<AppState, IView> {
-        return MainPresenterImpl()
-    }
+    private val observer = Observer<AppState> { renderData(it) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +63,9 @@ class MainActivity : BaseActivity<AppState>(), WordAdapter.Delegate {
         }
 
         binding.find.setOnClickListener {
-            presenter.getData(binding.searchEditText.text.toString())
+
+            model.getData(binding.searchEditText.text.toString())
+                .observe(this@MainActivity, observer)
 
             val view = this.currentFocus
             view?.let {
@@ -109,7 +112,8 @@ class MainActivity : BaseActivity<AppState>(), WordAdapter.Delegate {
         showViewError()
         binding.errorTextview.text = error ?: getString(R.string.undefined_error)
         binding.reloadButton.setOnClickListener {
-            presenter.getData(binding.searchEditText.text.toString())
+            model.getData(binding.searchEditText.text.toString())
+                .observe(this@MainActivity, observer)
         }
     }
 
@@ -132,6 +136,7 @@ class MainActivity : BaseActivity<AppState>(), WordAdapter.Delegate {
     }
 
     override fun onItemPicked(word: DictionaryEntry) {
-        Toast.makeText(this, word.translatesList.joinToString(separator = ",\n"), Toast.LENGTH_LONG).show()
+        Toast.makeText(this, word.translatesList.joinToString(separator = ",\n"), Toast.LENGTH_LONG)
+            .show()
     }
 }

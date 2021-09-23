@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import softing.ubah4ukdev.translator.domain.model.AppState
 import softing.ubah4ukdev.translator.domain.model.DictionaryResult
 import softing.ubah4ukdev.translator.domain.repository.IRepository
-import softing.ubah4ukdev.translator.presenter.IInteractor
+import softing.ubah4ukdev.translator.viewmodel.IInteractor
 
 /**
  *   Project: Translator
@@ -21,7 +21,7 @@ import softing.ubah4ukdev.translator.presenter.IInteractor
  *   v1.0
  */
 class MainInteractor(
-    private val repository: IRepository<DictionaryResult>,
+    private val repository: IRepository<DictionaryResult>
 ) : IInteractor<AppState> {
     override fun getData(word: String): Observable<AppState> =
         repository.getData(word)

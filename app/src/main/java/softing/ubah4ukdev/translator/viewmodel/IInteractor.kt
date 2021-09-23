@@ -1,4 +1,4 @@
-package softing.ubah4ukdev.translator.presenter
+package softing.ubah4ukdev.translator.viewmodel
 
 import io.reactivex.Observable
 
