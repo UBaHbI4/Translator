@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Translator</string>
+    <string name="error_textview_stub">Error</string>
+    <string name="reload_button">Reload</string>
+    <string name="undefined_error">Undefined error</string>
+    <string name="empty_server_response_on_success">Пустой ответ от сервера</string>
+    <string name="button_search">Поиск</string>
+    <string name="search_hint">Слово для перевода</string>
+    <string name="delete_description">X</string>
+    <string name="find_description">F</string>
 </resources>
