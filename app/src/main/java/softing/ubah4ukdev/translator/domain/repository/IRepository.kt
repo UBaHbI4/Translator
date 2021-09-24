@@ -17,6 +17,7 @@ import io.reactivex.Observable
  *   v1.0
  */
 interface IRepository<T> {
+
     /**
      * Получить перевод
      * @param word Слово, которое необходимо перевести

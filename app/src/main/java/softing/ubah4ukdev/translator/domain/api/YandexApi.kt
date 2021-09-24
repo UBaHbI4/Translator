@@ -21,6 +21,7 @@ import softing.ubah4ukdev.translator.domain.model.DictionaryResult
  *   v1.0
  */
 interface YandexApi {
+
     /**
      * Получить перевод
      * @param targetWord Слово, которое необходимо перевести

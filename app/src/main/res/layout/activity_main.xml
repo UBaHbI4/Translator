@@ -25,7 +25,8 @@
                 android:id="@+id/search_edit_text"
                 style="@style/BaseEditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSearch" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView

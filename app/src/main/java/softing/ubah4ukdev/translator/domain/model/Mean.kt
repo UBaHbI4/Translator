@@ -1,6 +1,10 @@
 package softing.ubah4ukdev.translator.domain.model
 
 import com.google.gson.annotations.SerializedName
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_GENDER
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_NUM
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_PART_OF_SPEECH
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_TEXT
 
 /**
  *   Project: Translator
@@ -17,27 +21,16 @@ import com.google.gson.annotations.SerializedName
  *   v1.0
  */
 data class Mean(
-    /**
-     *  Часть речи
-     */
-    @SerializedName("text")
+
+    @SerializedName(MODEL_TEXT)
     val text: String,
 
-    /**
-     *  Род существительного
-     */
-    @SerializedName("gen")
+    @SerializedName(MODEL_GENDER)
     val gender: String = "",
 
-    /**
-     *  Часть речи
-     */
-    @SerializedName("pos")
+    @SerializedName(MODEL_PART_OF_SPEECH)
     val partOfSpeech: String = "",
 
-    /**
-     *  Число
-     */
-    @SerializedName("num")
+    @SerializedName(MODEL_NUM)
     val num: String = ""
 )

@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import softing.ubah4ukdev.translator.domain.model.AppState
-import softing.ubah4ukdev.translator.domain.scheduler.SchedulerFactory
-import softing.ubah4ukdev.translator.domain.scheduler.Schedulers
 
 /**
  *   Project: Translator
@@ -24,8 +22,7 @@ import softing.ubah4ukdev.translator.domain.scheduler.Schedulers
  */
 abstract class BaseViewModel<T : AppState>(
     protected val liveDataForViewToObserve: MutableLiveData<T> = MutableLiveData(),
-    protected val compositeDisposable: CompositeDisposable = CompositeDisposable(),
-    protected val schedulerProvider: Schedulers = SchedulerFactory.create()
+    protected val compositeDisposable: CompositeDisposable = CompositeDisposable()
 ) : ViewModel() {
 
     open fun getData(word: String): LiveData<T> = liveDataForViewToObserve

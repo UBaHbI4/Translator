@@ -3,10 +3,9 @@ package softing.ubah4ukdev.translator.view.main
 import androidx.lifecycle.LiveData
 import io.reactivex.observers.DisposableObserver
 import softing.ubah4ukdev.translator.domain.model.AppState
-import softing.ubah4ukdev.translator.domain.repository.RepositoryImpl
-import softing.ubah4ukdev.translator.domain.repository.datasource.CacheDataSourceFactory
-import softing.ubah4ukdev.translator.domain.repository.datasource.NetworkDataSourceFactory
+import softing.ubah4ukdev.translator.domain.scheduler.Schedulers
 import softing.ubah4ukdev.translator.viewmodel.BaseViewModel
+import javax.inject.Inject
 
 /**
  *   Project: Translator
@@ -22,21 +21,23 @@ import softing.ubah4ukdev.translator.viewmodel.BaseViewModel
  *
  *   v1.0
  */
-class MainViewModel(
-    private val interactor: MainInteractor = MainInteractor(
-        RepositoryImpl(
-            NetworkDataSourceFactory.create(),
-            CacheDataSourceFactory.create()
-        )
-    )
+class MainViewModel @Inject constructor(
+    private val interactor: MainInteractor,
+    private val schedulers: Schedulers
 ) : BaseViewModel<AppState>() {
+
     private var appState: AppState? = null
+
+    fun translateLiveData(): LiveData<AppState> {
+        return liveDataForViewToObserve
+    }
 
     override fun getData(word: String): LiveData<AppState> {
         compositeDisposable.add(
-            interactor.getData(word)
-                .subscribeOn(schedulerProvider.background())
-                .observeOn(schedulerProvider.main())
+            interactor
+                .getData(word, true)
+                .subscribeOn(schedulers.background())
+                .observeOn(schedulers.main())
                 .doOnSubscribe { liveDataForViewToObserve.postValue(AppState.Loading(null)) }
                 .subscribeWith(getObserver())
         )

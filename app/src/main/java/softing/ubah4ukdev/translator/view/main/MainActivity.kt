@@ -1,16 +1,19 @@
 package softing.ubah4ukdev.translator.view.main
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import softing.ubah4ukdev.translator.R
@@ -19,19 +22,25 @@ import softing.ubah4ukdev.translator.domain.model.AppState
 import softing.ubah4ukdev.translator.domain.model.DictionaryEntry
 import softing.ubah4ukdev.translator.view.base.BaseActivity
 import softing.ubah4ukdev.translator.view.main.adapter.WordAdapter
+import javax.inject.Inject
 
-class MainActivity : BaseActivity<AppState>(), WordAdapter.Delegate {
+class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Delegate {
+
+    companion object {
+        private const val INPUT_METHOD_MANAGER_FLAGS = 0
+    }
+
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    override lateinit var model: MainViewModel
 
     private val binding: ActivityMainBinding by viewBinding()
 
-    override val model: MainViewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
-    }
-
-    private val adapter by lazy { WordAdapter(this) }
+    private val wordAdapter by lazy { WordAdapter(this) }
 
     private val textWatcher = object : TextWatcher {
-
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             if (binding.searchEditText.text != null && binding.searchEditText.text.toString()
                     .isNotEmpty()
@@ -49,36 +58,66 @@ class MainActivity : BaseActivity<AppState>(), WordAdapter.Delegate {
         override fun afterTextChanged(s: Editable) {}
     }
 
-    private val observer = Observer<AppState> { renderData(it) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.searchEditText.addTextChangedListener(textWatcher)
+        model = viewModelFactory.create(MainViewModel::class.java)
+        model.translateLiveData().observe(this@MainActivity, Observer<AppState> { renderData(it) })
 
-        binding.clearText.setOnClickListener {
-            binding.searchEditText.setText("")
-            binding.find.isEnabled = false
-            adapter.clear()
-        }
+        init()
+    }
 
-        binding.find.setOnClickListener {
-
-            model.getData(binding.searchEditText.text.toString())
-                .observe(this@MainActivity, observer)
-
-            val view = this.currentFocus
-            view?.let {
-                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as
-                        InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+    private fun init() {
+        with(binding) {
+            searchEditText.addTextChangedListener(textWatcher)
+            searchEditText.setOnEditorActionListener { view, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (view.text.isNotEmpty()) {
+                        model.getData(view.text.toString())
+                        hideKeyboardForTextView()
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    false
+                }
             }
-            binding.searchEditText.clearFocus()
-        }
 
-        binding.mainActivityRecyclerview.layoutManager =
-            LinearLayoutManager(applicationContext)
-        binding.mainActivityRecyclerview.adapter = adapter
+            clearText.setOnClickListener {
+                binding.searchEditText.setText("")
+                wordAdapter.clear()
+            }
+
+            find.isEnabled = false
+            find.setOnClickListener {
+                model.getData(binding.searchEditText.text.toString())
+                hideKeyboardForTextView()
+            }
+
+            with(mainActivityRecyclerview) {
+                layoutManager =
+                    LinearLayoutManager(applicationContext)
+                adapter = wordAdapter
+                itemAnimator = DefaultItemAnimator()
+                addItemDecoration(
+                    DividerItemDecoration(
+                        baseContext,
+                        LinearLayoutManager.VERTICAL
+                    )
+                )
+            }
+        }
+    }
+
+    private fun hideKeyboardForTextView() {
+        val view = this.currentFocus
+        view?.let {
+            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as
+                    InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(it.windowToken, INPUT_METHOD_MANAGER_FLAGS)
+        }
+        (view as? TextView)?.clearFocus()
     }
 
     override fun renderData(appState: AppState) {
@@ -88,18 +127,20 @@ class MainActivity : BaseActivity<AppState>(), WordAdapter.Delegate {
                     showErrorScreen(getString(R.string.empty_server_response_on_success))
                 } else {
                     showViewSuccess()
-                    adapter.setData(ArrayList(appState.data.dictionaryEntryList))
+                    wordAdapter.setData(ArrayList(appState.data.dictionaryEntryList))
                 }
             }
             is AppState.Loading -> {
                 showViewLoading()
-                if (appState.progress != null) {
-                    binding.progressBarHorizontal.visibility = VISIBLE
-                    binding.progressBarRound.visibility = GONE
-                    binding.progressBarHorizontal.progress = appState.progress
-                } else {
-                    binding.progressBarHorizontal.visibility = GONE
-                    binding.progressBarRound.visibility = VISIBLE
+                with(binding) {
+                    if (appState.progress != null) {
+                        progressBarHorizontal.visibility = VISIBLE
+                        progressBarRound.visibility = GONE
+                        progressBarHorizontal.progress = appState.progress
+                    } else {
+                        progressBarHorizontal.visibility = GONE
+                        progressBarRound.visibility = VISIBLE
+                    }
                 }
             }
             is AppState.Error -> {
@@ -113,26 +154,31 @@ class MainActivity : BaseActivity<AppState>(), WordAdapter.Delegate {
         binding.errorTextview.text = error ?: getString(R.string.undefined_error)
         binding.reloadButton.setOnClickListener {
             model.getData(binding.searchEditText.text.toString())
-                .observe(this@MainActivity, observer)
         }
     }
 
     private fun showViewSuccess() {
-        binding.successFrame.isVisible = true
-        binding.loadingFrame.isVisible = false
-        binding.errorFrame.isVisible = false
+        with(binding) {
+            successFrame.isVisible = true
+            loadingFrame.isVisible = false
+            errorFrame.isVisible = false
+        }
     }
 
     private fun showViewLoading() {
-        binding.successFrame.isVisible = false
-        binding.loadingFrame.isVisible = true
-        binding.errorFrame.isVisible = false
+        with(binding) {
+            successFrame.isVisible = false
+            loadingFrame.isVisible = true
+            errorFrame.isVisible = false
+        }
     }
 
     private fun showViewError() {
-        binding.successFrame.isVisible = false
-        binding.loadingFrame.isVisible = false
-        binding.errorFrame.isVisible = true
+        with(binding) {
+            successFrame.isVisible = false
+            loadingFrame.isVisible = false
+            errorFrame.isVisible = true
+        }
     }
 
     override fun onItemPicked(word: DictionaryEntry) {

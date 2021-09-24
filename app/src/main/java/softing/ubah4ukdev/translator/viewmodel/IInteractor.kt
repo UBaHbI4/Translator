@@ -5,22 +5,18 @@ import io.reactivex.Observable
 /**
  *   Project: Translator
  *
- *   Package: softing.ubah4ukdev.translator.presenter
+ *   Package: softing.ubah4ukdev.translator.viewmodel
  *
  *   Created by Ivan Sheynmaer
  *
  *   Description:
- *   Интерфейс интерактора
  *
- *   2021.09.19
+ *
+ *   2021.09.25
  *
  *   v1.0
  */
 interface IInteractor<T> {
-    /**
-     * Получить перевод
-     * @param word Слово, которое необходимо перевести
-     * @return Observable<T>
-     */
-    fun getData(word: String): Observable<T>
+
+    fun getData(word: String, fromRemoteSource: Boolean): Observable<T>
 }
