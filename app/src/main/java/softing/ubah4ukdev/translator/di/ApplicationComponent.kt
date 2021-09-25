@@ -27,6 +27,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
+        NetworkModule::class,
         YandexApiModule::class,
         InteractorModule::class,
         RepositoryModule::class,

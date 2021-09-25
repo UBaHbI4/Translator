@@ -1,6 +1,7 @@
 package softing.ubah4ukdev.translator.view.base
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -33,6 +34,12 @@ abstract class BaseActivity<T : AppState, I : IInteractor<T>> :
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
+    protected var isNetworkAvailable: Boolean = false
+
+    abstract val model: BaseViewModel<T>
+
+    abstract fun renderData(appState: T)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -42,7 +49,8 @@ abstract class BaseActivity<T : AppState, I : IInteractor<T>> :
         return androidInjector
     }
 
-    abstract val model: BaseViewModel<T>
-
-    abstract fun renderData(appState: T)
+    protected fun noInternetMessageShow() {
+        Toast.makeText(baseContext, getString(R.string.no_internet_message), Toast.LENGTH_LONG)
+            .show()
+    }
 }

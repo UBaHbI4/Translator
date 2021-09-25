@@ -29,4 +29,5 @@
     <dimen name="activity_main_clear_text_margin_end">45dp</dimen>
     <dimen name="activity_main_find_margin_end">10dp</dimen>
     <dimen name="activity_main_success_frame_margin_top">60dp</dimen>
+    <dimen name="main_error_text_margin_horizontal">10dp</dimen>
 </resources>

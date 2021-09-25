@@ -61,6 +61,11 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Deleg
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        model.networkStateLiveData().observe(this@MainActivity, Observer<Boolean> {
+            isNetworkAvailable = it
+        })
+        model.getNetworkState()
+
         model = viewModelFactory.create(MainViewModel::class.java)
         model.translateLiveData().observe(this@MainActivity, Observer<AppState> { renderData(it) })
 
@@ -73,9 +78,16 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Deleg
             searchEditText.setOnEditorActionListener { view, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (view.text.isNotEmpty()) {
-                        model.getData(view.text.toString())
-                        hideKeyboardForTextView()
-                        true
+                        if (isNetworkAvailable) {
+                            model.getData(view.text.toString())
+                            hideKeyboardForTextView()
+                            true
+                        } else {
+                            wordAdapter.clear()
+                            hideKeyboardForTextView()
+                            noInternetMessageShow()
+                            false
+                        }
                     } else {
                         false
                     }
@@ -91,8 +103,14 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Deleg
 
             find.isEnabled = false
             find.setOnClickListener {
-                model.getData(binding.searchEditText.text.toString())
-                hideKeyboardForTextView()
+                if (isNetworkAvailable) {
+                    model.getData(binding.searchEditText.text.toString())
+                    hideKeyboardForTextView()
+                } else {
+                    hideKeyboardForTextView()
+                    wordAdapter.clear()
+                    noInternetMessageShow()
+                }
             }
 
             with(mainActivityRecyclerview) {
@@ -153,7 +171,14 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Deleg
         showViewError()
         binding.errorTextview.text = error ?: getString(R.string.undefined_error)
         binding.reloadButton.setOnClickListener {
-            model.getData(binding.searchEditText.text.toString())
+            if (isNetworkAvailable) {
+                model.getData(binding.searchEditText.text.toString())
+                hideKeyboardForTextView()
+            } else {
+                hideKeyboardForTextView()
+                wordAdapter.clear()
+                noInternetMessageShow()
+            }
         }
     }
 
