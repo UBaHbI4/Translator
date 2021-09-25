@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import softing.ubah4ukdev.translator.R
 import softing.ubah4ukdev.translator.databinding.ActivityMainBinding
+import softing.ubah4ukdev.translator.di.MainViewModelAssistedFactory
 import softing.ubah4ukdev.translator.domain.model.AppState
 import softing.ubah4ukdev.translator.domain.model.DictionaryEntry
 import softing.ubah4ukdev.translator.view.base.BaseActivity
@@ -31,9 +32,8 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Deleg
     }
 
     @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var assistedFactory: MainViewModelAssistedFactory
 
-    @Inject
     override lateinit var model: MainViewModel
 
     private val binding: ActivityMainBinding by viewBinding()
@@ -60,13 +60,15 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Deleg
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val viewModelFactory = assistedFactory.create(this)
+
+        model = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
         model.networkStateLiveData().observe(this@MainActivity, Observer<Boolean> {
             isNetworkAvailable = it
         })
         model.getNetworkState()
 
-        model = viewModelFactory.create(MainViewModel::class.java)
         model.translateLiveData().observe(this@MainActivity, Observer<AppState> { renderData(it) })
 
         init()
@@ -209,5 +211,22 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Deleg
     override fun onItemPicked(word: DictionaryEntry) {
         Toast.makeText(this, word.translatesList.joinToString(separator = ",\n"), Toast.LENGTH_LONG)
             .show()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        model.saveLastWord(binding.searchEditText.text.toString())
+        outState.putString("TEST", "TESTVALUE")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        model.getLastWord().let {
+            /**
+             * Состояние и так восстанавливается. Но можно перепослать запрос, чтобы
+             * получить актуальные данные, если расскоментировать код ниже:
+             * //model.getData(it)
+             */
+        }
     }
 }
