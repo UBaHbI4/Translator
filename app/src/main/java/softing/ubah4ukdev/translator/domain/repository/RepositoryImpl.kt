@@ -3,7 +3,6 @@ package softing.ubah4ukdev.translator.domain.repository
 import io.reactivex.Observable
 import softing.ubah4ukdev.translator.domain.model.DictionaryResult
 import softing.ubah4ukdev.translator.domain.repository.datasource.IDataSource
-import javax.inject.Inject
 
 /**
  *   Project: Translator
@@ -20,11 +19,9 @@ import javax.inject.Inject
  *
  *   v1.0
  */
-class RepositoryImpl @Inject constructor(
-
-    private val dataSource: IDataSource<DictionaryResult>,
-
-    ) : IRepository<DictionaryResult> {
+class RepositoryImpl(
+    private val dataSource: IDataSource<DictionaryResult>
+) : IRepository<DictionaryResult> {
 
     override fun getData(word: String): Observable<DictionaryResult> =
         dataSource.getData(word)

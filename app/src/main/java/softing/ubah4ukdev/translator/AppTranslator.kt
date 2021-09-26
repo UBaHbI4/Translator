@@ -1,9 +1,9 @@
 package softing.ubah4ukdev.translator
 
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
-import softing.ubah4ukdev.translator.di.DaggerApplicationComponent
-import softing.ubah4ukdev.translator.domain.scheduler.DefaultSchedulers
+import android.app.Application
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import softing.ubah4ukdev.translator.di.Di
 
 /**
  *   Project: Translator
@@ -19,12 +19,21 @@ import softing.ubah4ukdev.translator.domain.scheduler.DefaultSchedulers
  *
  *   v1.0
  */
-class AppTranslator : DaggerApplication() {
+class AppTranslator : Application() {
 
-    override fun applicationInjector(): AndroidInjector<AppTranslator> =
-        DaggerApplicationComponent
-            .builder()
-            .withContext(applicationContext)
-            .withSchedulers(DefaultSchedulers())
-            .build()
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            androidContext(this@AppTranslator)
+            modules(
+                listOf(
+                    Di.viewModelModule(),
+                    Di.interactorModule(),
+                    Di.networkModule(),
+                    Di.repositoryModule(),
+                    Di.yandexApiModule()
+                )
+            )
+        }
+    }
 }

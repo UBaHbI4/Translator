@@ -40,7 +40,7 @@ class MainViewModel constructor(
         private const val TEXT_SAVE = "Save: "
         private const val TEXT_RESTORE = "Restore: "
 
-        private const val DELAY_LOADING = 3L
+        private const val DELAY_LOADING = 0L
     }
 
     fun saveLastWord(word: String) {

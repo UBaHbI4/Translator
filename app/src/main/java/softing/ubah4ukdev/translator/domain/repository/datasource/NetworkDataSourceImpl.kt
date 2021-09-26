@@ -3,7 +3,6 @@ package softing.ubah4ukdev.translator.domain.repository.datasource
 import io.reactivex.Observable
 import softing.ubah4ukdev.translator.domain.api.YandexApi
 import softing.ubah4ukdev.translator.domain.model.DictionaryResult
-import javax.inject.Inject
 
 /**
  *   Project: Translator
@@ -19,7 +18,7 @@ import javax.inject.Inject
  *
  *   v1.0
  */
-class NetworkDataSourceImpl @Inject constructor(private val yandexApi: YandexApi) :
+class NetworkDataSourceImpl(private val yandexApi: YandexApi) :
     IDataSource<DictionaryResult> {
 
     override fun getData(word: String): Observable<DictionaryResult> =
