@@ -19,12 +19,16 @@ buildscript {
     ext.retrofit2_version = '2.9.0'
     ext.okhttp3_logging_version = '4.9.1'
     ext.rxjava2_adapter_version = '1.0.0'
+    ext.coroutines_adapter = '0.9.2'
 
     // Dagger
     ext.dagger_version = '2.37'
 
     // Koin
-    ext.koin_version = "3.1.2"
+    ext.koin_version = '3.1.2'
+
+    // Coroutines
+    ext.coroutines_version = '1.5.1'
 
     // Tests
     ext.junit_version = '4.13.2'

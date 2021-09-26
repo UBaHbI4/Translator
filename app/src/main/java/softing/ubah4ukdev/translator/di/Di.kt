@@ -2,7 +2,8 @@ package softing.ubah4ukdev.translator.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -19,8 +20,6 @@ import softing.ubah4ukdev.translator.domain.repository.IRepository
 import softing.ubah4ukdev.translator.domain.repository.RepositoryImpl
 import softing.ubah4ukdev.translator.domain.repository.datasource.CacheDataSourceImpl
 import softing.ubah4ukdev.translator.domain.repository.datasource.NetworkDataSourceImpl
-import softing.ubah4ukdev.translator.domain.scheduler.DefaultSchedulers
-import softing.ubah4ukdev.translator.domain.scheduler.Schedulers
 import softing.ubah4ukdev.translator.utils.network.NetworkStateObservable
 import softing.ubah4ukdev.translator.view.main.MainInteractor
 import softing.ubah4ukdev.translator.view.main.MainViewModel
@@ -44,12 +43,9 @@ object Di {
     private const val REMOTE = "REMOTE"
 
     fun viewModelModule() = module {
-        single<Schedulers> { DefaultSchedulers() }
-
         viewModel {
             MainViewModel(
                 interactor = get(),
-                schedulers = get(),
                 networkState = get(),
                 get()
             )
@@ -86,6 +82,10 @@ object Di {
     }
 
     fun yandexApiModule() = module {
+        single<Interceptor> {
+            YandexApiInterceptor()
+        }
+
         single<Gson> {
             GsonBuilder()
                 .create()
@@ -96,7 +96,7 @@ object Di {
                 .baseUrl(BuildConfig.BASE_URL)
                 .client(
                     OkHttpClient.Builder()
-                        .addInterceptor(YandexApiInterceptor)
+                        .addInterceptor(interceptor = get())
                         .addInterceptor(HttpLoggingInterceptor().apply {
                             level = if (BuildConfig.DEBUG) {
                                 HttpLoggingInterceptor.Level.BODY
@@ -106,7 +106,7 @@ object Di {
                         })
                         .build()
                 )
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create(get()))
                 .build()
                 .create(YandexApi::class.java)

@@ -19,18 +19,20 @@ import softing.ubah4ukdev.translator.BuildConfig
  *
  *   v1.0
  */
-object YandexApiInterceptor : Interceptor {
+class YandexApiInterceptor : Interceptor {
 
-    private const val USER_NAME = "demo"
-    private const val HEADER_NAME = "Authorization"
+    companion object {
+        private const val USER_NAME = "demo"
+        private const val HEADER_NAME = "Authorization"
 
-    private const val CODE_UNDEFINED_ERROR = 0
-    private const val CODE_INFO = 1
-    private const val CODE_SUCCESS = 2
-    private const val CODE_REDIRECTION = 3
-    private const val CODE_CLIENT_ERROR = 4
-    private const val CODE_SERVER_ERROR = 5
-    private const val RESPONSE_CODE_DIVIDER = 100
+        private const val CODE_UNDEFINED_ERROR = 0
+        private const val CODE_INFO = 1
+        private const val CODE_SUCCESS = 2
+        private const val CODE_REDIRECTION = 3
+        private const val CODE_CLIENT_ERROR = 4
+        private const val CODE_SERVER_ERROR = 5
+        private const val RESPONSE_CODE_DIVIDER = 100
+    }
 
     var responseCode: Int = CODE_UNDEFINED_ERROR
 

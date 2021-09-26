@@ -1,7 +1,5 @@
 package softing.ubah4ukdev.translator.domain.repository
 
-import io.reactivex.Observable
-
 /**
  *   Project: Translator
  *
@@ -23,5 +21,5 @@ interface IRepository<T> {
      * @param word Слово, которое необходимо перевести
      * @return Observable<T>
      */
-    fun getData(word: String): Observable<T>
+    suspend fun getData(word: String): T
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.*
 import softing.ubah4ukdev.translator.domain.model.AppState
 
 /**
@@ -26,11 +27,26 @@ abstract class BaseViewModel<T : AppState>(
     protected val liveDataForNetworkState: MutableLiveData<Boolean> = MutableLiveData(),
 ) : ViewModel() {
 
-    open fun getData(word: String): LiveData<T> = liveDataForViewToObserve
+    protected val viewModelCoroutineScope = CoroutineScope(
+        Dispatchers.IO
+                + SupervisorJob()
+                + CoroutineExceptionHandler { coroutineContext, throwable ->
+            handleError(throwable)
+        })
+
+    abstract fun getData(word: String, isOnline: Boolean)
 
     open fun getNetworkState(): LiveData<Boolean> = liveDataForNetworkState
 
     override fun onCleared() {
+        super.onCleared()
+        cancelJob()
         compositeDisposable.clear()
     }
+
+    protected fun cancelJob() {
+        viewModelCoroutineScope.coroutineContext.cancelChildren()
+    }
+
+    abstract fun handleError(error: Throwable)
 }

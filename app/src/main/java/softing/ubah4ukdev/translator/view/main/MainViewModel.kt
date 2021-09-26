@@ -3,14 +3,15 @@ package softing.ubah4ukdev.translator.view.main
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.rxkotlin.plusAssign
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import softing.ubah4ukdev.translator.domain.model.AppState
-import softing.ubah4ukdev.translator.domain.scheduler.Schedulers
 import softing.ubah4ukdev.translator.utils.network.NetworkState
 import softing.ubah4ukdev.translator.utils.network.NetworkStateObservable
 import softing.ubah4ukdev.translator.viewmodel.BaseViewModel
-import java.util.concurrent.TimeUnit
 
 /**
  *   Project: Translator
@@ -28,7 +29,6 @@ import java.util.concurrent.TimeUnit
  */
 class MainViewModel constructor(
     private val interactor: MainInteractor,
-    private val schedulers: Schedulers,
     private val networkState: NetworkStateObservable,
     private val state: SavedStateHandle
 ) : BaseViewModel<AppState>() {
@@ -40,7 +40,10 @@ class MainViewModel constructor(
         private const val TEXT_SAVE = "Save: "
         private const val TEXT_RESTORE = "Restore: "
 
-        private const val DELAY_LOADING = 0L
+        //Задержка для экспериментов с корутинами
+        private const val DELAY_LOADING = 1500L
+
+        private const val EMPTY_RESULT_MESSAGE = "Отсутсвуют данные. Измените/повторите запрос."
     }
 
     fun saveLastWord(word: String) {
@@ -53,8 +56,6 @@ class MainViewModel constructor(
         return state.get(LAST_INPUT_WORD) ?: ""
     }
 
-    private var appState: AppState? = null
-
     fun translateLiveData(): LiveData<AppState> {
         return liveDataForViewToObserve
     }
@@ -63,17 +64,37 @@ class MainViewModel constructor(
         return liveDataForNetworkState
     }
 
-    override fun getData(word: String): LiveData<AppState> {
-        compositeDisposable +=
-            interactor
-                .getData(word, true)
-                .delay(DELAY_LOADING, TimeUnit.SECONDS)
-                .subscribeOn(schedulers.background())
-                .observeOn(schedulers.main())
-                .doOnSubscribe { liveDataForViewToObserve.postValue(AppState.Loading(null)) }
-                .subscribeWith(getObserver())
-        return super.getData(word)
+    override fun getData(word: String, isOnline: Boolean) {
+        liveDataForViewToObserve.value = AppState.Loading(null)
+        cancelJob()
+
+        viewModelCoroutineScope.launch {
+            startInteractor(word, isOnline)
+        }
     }
+
+    private suspend fun startInteractor(word: String, isOnline: Boolean) =
+        withContext(Dispatchers.IO) {
+            delay(DELAY_LOADING)
+
+            val result = interactor.getData(word, isOnline)
+
+            if (result.dictionaryEntryList.isNotEmpty()) {
+                liveDataForViewToObserve.postValue(AppState.Success(result))
+            } else {
+                liveDataForViewToObserve.postValue(AppState.Error(Exception(EMPTY_RESULT_MESSAGE)))
+            }
+        }
+
+    override fun handleError(error: Throwable) {
+        liveDataForViewToObserve.postValue(AppState.Error(error))
+    }
+
+    override fun onCleared() {
+        liveDataForViewToObserve.value = AppState.Success(null)
+        super.onCleared()
+    }
+
 
     override fun getNetworkState(): LiveData<Boolean> {
         compositeDisposable +=
@@ -85,21 +106,5 @@ class MainViewModel constructor(
                 .connect()
 
         return super.getNetworkState()
-    }
-
-    private fun getObserver(): DisposableObserver<AppState> {
-        return object : DisposableObserver<AppState>() {
-            override fun onNext(state: AppState) {
-                appState = state
-                liveDataForViewToObserve.postValue(state)
-            }
-
-            override fun onError(e: Throwable) {
-                liveDataForViewToObserve.postValue(AppState.Error(e))
-            }
-
-            override fun onComplete() {
-            }
-        }
     }
 }

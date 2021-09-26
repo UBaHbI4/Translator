@@ -73,7 +73,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Deleg
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (view.text.isNotEmpty()) {
                         if (isNetworkAvailable) {
-                            model.getData(view.text.toString())
+                            model.getData(view.text.toString(), isNetworkAvailable)
                             hideKeyboardForTextView()
                             true
                         } else {
@@ -98,7 +98,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Deleg
             find.isEnabled = false
             find.setOnClickListener {
                 if (isNetworkAvailable) {
-                    model.getData(binding.searchEditText.text.toString())
+                    model.getData(binding.searchEditText.text.toString(), isNetworkAvailable)
                     hideKeyboardForTextView()
                 } else {
                     hideKeyboardForTextView()
@@ -166,7 +166,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), WordAdapter.Deleg
         binding.errorTextview.text = error ?: getString(R.string.undefined_error)
         binding.reloadButton.setOnClickListener {
             if (isNetworkAvailable) {
-                model.getData(binding.searchEditText.text.toString())
+                model.getData(binding.searchEditText.text.toString(), isNetworkAvailable)
                 hideKeyboardForTextView()
             } else {
                 hideKeyboardForTextView()

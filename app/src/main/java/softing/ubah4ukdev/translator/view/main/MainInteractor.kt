@@ -1,8 +1,5 @@
 package softing.ubah4ukdev.translator.view.main
 
-import android.util.Log
-import io.reactivex.Observable
-import softing.ubah4ukdev.translator.domain.model.AppState
 import softing.ubah4ukdev.translator.domain.model.DictionaryResult
 import softing.ubah4ukdev.translator.domain.repository.IRepository
 import softing.ubah4ukdev.translator.viewmodel.IInteractor
@@ -24,15 +21,13 @@ import softing.ubah4ukdev.translator.viewmodel.IInteractor
 class MainInteractor(
     val repositoryRemote: IRepository<DictionaryResult>,
     val repositoryLocal: IRepository<DictionaryResult>
-) : IInteractor<AppState> {
+) : IInteractor<DictionaryResult> {
 
-    override fun getData(word: String, fromRemoteSource: Boolean): Observable<AppState> {
+    override suspend fun getData(word: String, fromRemoteSource: Boolean): DictionaryResult {
         return if (fromRemoteSource) {
-            Log.d("translatorDebug", "repositoryRemote")
             repositoryRemote
         } else {
-            Log.d("translatorDebug", "repositoryLocal")
             repositoryLocal
-        }.getData(word).map { AppState.Success(it) }
+        }.getData(word)
     }
 }

@@ -1,6 +1,5 @@
 package softing.ubah4ukdev.translator.domain.repository.datasource
 
-import io.reactivex.Observable
 import softing.ubah4ukdev.translator.domain.api.YandexApi
 import softing.ubah4ukdev.translator.domain.model.DictionaryResult
 
@@ -21,6 +20,6 @@ import softing.ubah4ukdev.translator.domain.model.DictionaryResult
 class NetworkDataSourceImpl(private val yandexApi: YandexApi) :
     IDataSource<DictionaryResult> {
 
-    override fun getData(word: String): Observable<DictionaryResult> =
-        yandexApi.search(word)
+    override suspend fun getData(word: String): DictionaryResult =
+        yandexApi.searchAsync(word).await()
 }

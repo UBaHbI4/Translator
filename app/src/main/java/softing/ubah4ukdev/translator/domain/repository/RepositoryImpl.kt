@@ -1,6 +1,5 @@
 package softing.ubah4ukdev.translator.domain.repository
 
-import io.reactivex.Observable
 import softing.ubah4ukdev.translator.domain.model.DictionaryResult
 import softing.ubah4ukdev.translator.domain.repository.datasource.IDataSource
 
@@ -23,6 +22,6 @@ class RepositoryImpl(
     private val dataSource: IDataSource<DictionaryResult>
 ) : IRepository<DictionaryResult> {
 
-    override fun getData(word: String): Observable<DictionaryResult> =
+    override suspend fun getData(word: String): DictionaryResult =
         dataSource.getData(word)
 }
