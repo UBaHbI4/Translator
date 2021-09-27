@@ -1,7 +1,5 @@
 package softing.ubah4ukdev.translator.viewmodel
 
-import io.reactivex.Observable
-
 /**
  *   Project: Translator
  *
@@ -18,5 +16,5 @@ import io.reactivex.Observable
  */
 interface IInteractor<T> {
 
-    fun getData(word: String, fromRemoteSource: Boolean): Observable<T>
+    suspend fun getData(word: String, fromRemoteSource: Boolean): T
 }

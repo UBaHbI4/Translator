@@ -1,14 +1,8 @@
 package softing.ubah4ukdev.translator.view.main
 
-import android.util.Log
-import io.reactivex.Observable
-import softing.ubah4ukdev.translator.di.Qualifiers.Local
-import softing.ubah4ukdev.translator.di.Qualifiers.Remote
-import softing.ubah4ukdev.translator.domain.model.AppState
 import softing.ubah4ukdev.translator.domain.model.DictionaryResult
 import softing.ubah4ukdev.translator.domain.repository.IRepository
 import softing.ubah4ukdev.translator.viewmodel.IInteractor
-import javax.inject.Inject
 
 /**
  *   Project: Translator
@@ -24,18 +18,16 @@ import javax.inject.Inject
  *
  *   v1.0
  */
-class MainInteractor @Inject constructor(
-    @Remote val repositoryRemote: IRepository<DictionaryResult>,
-    @Local val repositoryLocal: IRepository<DictionaryResult>
-) : IInteractor<AppState> {
+class MainInteractor(
+    val repositoryRemote: IRepository<DictionaryResult>,
+    val repositoryLocal: IRepository<DictionaryResult>
+) : IInteractor<DictionaryResult> {
 
-    override fun getData(word: String, fromRemoteSource: Boolean): Observable<AppState> {
+    override suspend fun getData(word: String, fromRemoteSource: Boolean): DictionaryResult {
         return if (fromRemoteSource) {
-            Log.d("translatorDebug", "repositoryRemote")
             repositoryRemote
         } else {
-            Log.d("translatorDebug", "repositoryLocal")
             repositoryLocal
-        }.getData(word).map { AppState.Success(it) }
+        }.getData(word)
     }
 }

@@ -1,17 +1,12 @@
 package softing.ubah4ukdev.translator.view.base
 
-import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import softing.ubah4ukdev.translator.R
 import softing.ubah4ukdev.translator.domain.model.AppState
+import softing.ubah4ukdev.translator.domain.model.DictionaryResult
 import softing.ubah4ukdev.translator.viewmodel.BaseViewModel
 import softing.ubah4ukdev.translator.viewmodel.IInteractor
-import javax.inject.Inject
 
 /**
  *   Project: Translator
@@ -27,27 +22,14 @@ import javax.inject.Inject
  *
  *   v1.0
  */
-abstract class BaseActivity<T : AppState, I : IInteractor<T>> :
-    AppCompatActivity(R.layout.activity_main),
-    HasAndroidInjector {
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+abstract class BaseActivity<T : AppState, I : IInteractor<DictionaryResult>> :
+    AppCompatActivity(R.layout.activity_main) {
 
     protected var isNetworkAvailable: Boolean = false
 
     abstract val model: BaseViewModel<T>
 
     abstract fun renderData(appState: T)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun androidInjector(): AndroidInjector<Any> {
-        return androidInjector
-    }
 
     protected fun noInternetMessageShow() {
         Toast.makeText(baseContext, getString(R.string.no_internet_message), Toast.LENGTH_LONG)

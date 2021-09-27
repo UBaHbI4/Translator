@@ -1,6 +1,6 @@
 package softing.ubah4ukdev.translator.domain.api
 
-import io.reactivex.Observable
+import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Query
 import softing.ubah4ukdev.translator.BuildConfig
@@ -28,5 +28,5 @@ interface YandexApi {
      * @return DictionaryResult
      */
     @GET("dicservice.json/lookup?key=${BuildConfig.API_TOKEN}&lang=en-ru")
-    fun search(@Query("text") targetWord: String): Observable<DictionaryResult>
+    fun searchAsync(@Query("text") targetWord: String): Deferred<DictionaryResult>
 }
