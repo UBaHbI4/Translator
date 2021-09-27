@@ -1,6 +1,9 @@
 package softing.ubah4ukdev.translator
 
-import android.app.Application
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
+import softing.ubah4ukdev.translator.di.DaggerApplicationComponent
+import softing.ubah4ukdev.translator.domain.scheduler.DefaultSchedulers
 
 /**
  *   Project: Translator
@@ -16,5 +19,12 @@ import android.app.Application
  *
  *   v1.0
  */
-class AppTranslator : Application() {
+class AppTranslator : DaggerApplication() {
+
+    override fun applicationInjector(): AndroidInjector<AppTranslator> =
+        DaggerApplicationComponent
+            .builder()
+            .withContext(applicationContext)
+            .withSchedulers(DefaultSchedulers())
+            .build()
 }

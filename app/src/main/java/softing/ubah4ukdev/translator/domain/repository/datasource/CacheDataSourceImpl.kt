@@ -18,7 +18,8 @@ import softing.ubah4ukdev.translator.domain.model.DictionaryResult
  *
  *   v1.0
  */
-class CacheDataSourceImpl : ICacheDataSource {
+class CacheDataSourceImpl : IDataSource<DictionaryResult> {
+
     override fun getData(word: String): Observable<DictionaryResult> =
-        Observable.empty()
+        Observable.error(Exception("Локальный источник данных еще не реализован"))
 }

@@ -20,6 +20,7 @@ import softing.ubah4ukdev.translator.BuildConfig
  *   v1.0
  */
 object YandexApiInterceptor : Interceptor {
+
     private const val USER_NAME = "demo"
     private const val HEADER_NAME = "Authorization"
 

@@ -1,6 +1,7 @@
 package softing.ubah4ukdev.translator.domain.model
 
 import com.google.gson.annotations.SerializedName
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_DICTIONARY_ENTRY_LIST
 
 /**
  *   Project: Translator
@@ -17,9 +18,7 @@ import com.google.gson.annotations.SerializedName
  *   v1.0
  */
 data class DictionaryResult(
-    /**
-     *  Список словарных статей
-     */
-    @SerializedName("def")
+
+    @SerializedName(MODEL_DICTIONARY_ENTRY_LIST)
     val dictionaryEntryList: List<DictionaryEntry>
 )

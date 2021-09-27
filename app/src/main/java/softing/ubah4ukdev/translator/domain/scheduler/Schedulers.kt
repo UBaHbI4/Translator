@@ -17,6 +17,7 @@ import io.reactivex.Scheduler
  *   v1.0
  */
 interface Schedulers {
+
     /**
      * Фоновый поток
      */

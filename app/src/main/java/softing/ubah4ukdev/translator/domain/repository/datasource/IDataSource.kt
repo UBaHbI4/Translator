@@ -17,5 +17,11 @@ import io.reactivex.Observable
  *   v1.0
  */
 interface IDataSource<T> {
+
+    /**
+     * Получить перевод
+     * @param word Слово, которое необходимо перевести
+     * @return Observable<T>
+     */
     fun getData(word: String): Observable<T>
 }

@@ -25,7 +25,8 @@
                 android:id="@+id/search_edit_text"
                 style="@style/BaseEditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSearch" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -100,6 +101,7 @@
             android:id="@+id/error_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/main_error_text_margin_horizontal"
             android:text="@string/error_textview_stub" />
 
         <com.google.android.material.button.MaterialButton

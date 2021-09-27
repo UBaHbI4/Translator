@@ -1,10 +1,17 @@
 package softing.ubah4ukdev.translator.view.base
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import softing.ubah4ukdev.translator.R
 import softing.ubah4ukdev.translator.domain.model.AppState
-import softing.ubah4ukdev.translator.presenter.IPresenter
+import softing.ubah4ukdev.translator.viewmodel.BaseViewModel
+import softing.ubah4ukdev.translator.viewmodel.IInteractor
+import javax.inject.Inject
 
 /**
  *   Project: Translator
@@ -20,26 +27,30 @@ import softing.ubah4ukdev.translator.presenter.IPresenter
  *
  *   v1.0
  */
-abstract class BaseActivity<T : AppState> : AppCompatActivity(R.layout.activity_main), IView {
+abstract class BaseActivity<T : AppState, I : IInteractor<T>> :
+    AppCompatActivity(R.layout.activity_main),
+    HasAndroidInjector {
 
-    protected lateinit var presenter: IPresenter<T, IView>
+    @Inject
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
-    protected abstract fun createPresenter(): IPresenter<T, IView>
+    protected var isNetworkAvailable: Boolean = false
 
-    abstract override fun renderData(appState: AppState)
+    abstract val model: BaseViewModel<T>
+
+    abstract fun renderData(appState: T)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        presenter = createPresenter()
     }
 
-    override fun onStart() {
-        super.onStart()
-        presenter.attachView(this)
+    override fun androidInjector(): AndroidInjector<Any> {
+        return androidInjector
     }
 
-    override fun onStop() {
-        super.onStop()
-        presenter.detachView(this)
+    protected fun noInternetMessageShow() {
+        Toast.makeText(baseContext, getString(R.string.no_internet_message), Toast.LENGTH_LONG)
+            .show()
     }
 }

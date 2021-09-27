@@ -1,6 +1,12 @@
 package softing.ubah4ukdev.translator.domain.model
 
 import com.google.gson.annotations.SerializedName
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_GENDER
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_NUM
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_PART_OF_SPEECH
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_TEXT
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_TRANSCRIPTION
+import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_TRANSLATES_LIST
 
 /**
  *   Project: Translator
@@ -17,39 +23,22 @@ import com.google.gson.annotations.SerializedName
  *   v1.0
  */
 data class DictionaryEntry(
-    /**
-     *  Род существительного
-     */
-    @SerializedName("gen")
+
+    @SerializedName(MODEL_GENDER)
     val gender: String = "",
 
-    /**
-     *  Часть речи
-     */
-    @SerializedName("pos")
+    @SerializedName(MODEL_PART_OF_SPEECH)
     val partOfSpeech: String = "",
 
-    /**
-     *  Текст статьи, перевода или синонима.
-     */
-    @SerializedName("text")
+    @SerializedName(MODEL_TEXT)
     val text: String = "",
 
-    /**
-     *  Список переводов
-     */
-    @SerializedName("tr")
+    @SerializedName(MODEL_TRANSLATES_LIST)
     val translatesList: List<Translation> = listOf(),
 
-    /**
-     *  Транскрипция искомого слова
-     */
-    @SerializedName("ts")
+    @SerializedName(MODEL_TRANSCRIPTION)
     val transcription: String = "",
 
-    /**
-     *  Число
-     */
-    @SerializedName("num")
+    @SerializedName(MODEL_NUM)
     val num: String = ""
 )
