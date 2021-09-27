@@ -47,7 +47,7 @@ object Di {
             MainViewModel(
                 interactor = get(),
                 networkState = get(),
-                get()
+                state = get()
             )
         }
     }

@@ -4,10 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import softing.ubah4ukdev.translator.domain.model.AppState
 import softing.ubah4ukdev.translator.utils.network.NetworkState
 import softing.ubah4ukdev.translator.utils.network.NetworkStateObservable
@@ -73,18 +71,17 @@ class MainViewModel constructor(
         }
     }
 
-    private suspend fun startInteractor(word: String, isOnline: Boolean) =
-        withContext(Dispatchers.IO) {
-            delay(DELAY_LOADING)
+    private suspend fun startInteractor(word: String, isOnline: Boolean) {
+        delay(DELAY_LOADING)
 
-            val result = interactor.getData(word, isOnline)
+        val result = interactor.getData(word, isOnline)
 
-            if (result.dictionaryEntryList.isNotEmpty()) {
-                liveDataForViewToObserve.postValue(AppState.Success(result))
-            } else {
-                liveDataForViewToObserve.postValue(AppState.Error(Exception(EMPTY_RESULT_MESSAGE)))
-            }
+        if (result.dictionaryEntryList.isNotEmpty()) {
+            liveDataForViewToObserve.postValue(AppState.Success(result))
+        } else {
+            liveDataForViewToObserve.postValue(AppState.Error(Exception(EMPTY_RESULT_MESSAGE)))
         }
+    }
 
     override fun handleError(error: Throwable) {
         liveDataForViewToObserve.postValue(AppState.Error(error))

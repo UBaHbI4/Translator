@@ -27,6 +27,10 @@ abstract class BaseViewModel<T : AppState>(
     protected val liveDataForNetworkState: MutableLiveData<Boolean> = MutableLiveData(),
 ) : ViewModel() {
 
+    companion object {
+        private const val CANCEL_MESSAGE = "Уже не актуально."
+    }
+
     protected val viewModelCoroutineScope = CoroutineScope(
         Dispatchers.IO
                 + SupervisorJob()
@@ -45,7 +49,7 @@ abstract class BaseViewModel<T : AppState>(
     }
 
     protected fun cancelJob() {
-        viewModelCoroutineScope.coroutineContext.cancelChildren()
+        viewModelCoroutineScope.coroutineContext.cancel(CancellationException(CANCEL_MESSAGE))
     }
 
     abstract fun handleError(error: Throwable)
