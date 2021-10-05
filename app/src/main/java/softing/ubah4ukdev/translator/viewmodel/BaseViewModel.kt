@@ -49,7 +49,7 @@ abstract class BaseViewModel<T : AppState>(
     }
 
     protected fun cancelJob() {
-        viewModelCoroutineScope.coroutineContext.cancel(CancellationException(CANCEL_MESSAGE))
+        viewModelCoroutineScope.coroutineContext.cancelChildren(CancellationException(CANCEL_MESSAGE))
     }
 
     abstract fun handleError(error: Throwable)
