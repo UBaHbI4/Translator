@@ -1,7 +1,7 @@
 package softing.ubah4ukdev.translator.view.base
 
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import softing.ubah4ukdev.translator.R
 import softing.ubah4ukdev.translator.domain.model.AppState
 import softing.ubah4ukdev.translator.domain.model.DictionaryResult
@@ -16,14 +16,14 @@ import softing.ubah4ukdev.translator.viewmodel.IInteractor
  *   Created by Ivan Sheynmaer
  *
  *   Description:
- *   Общий абстрактный класс для Activity
+ *   Общий абстрактный класс для Fragment
  *
  *   2021.09.19
  *
  *   v1.0
  */
-abstract class BaseActivity<T : AppState, I : IInteractor<DictionaryResult>> :
-    AppCompatActivity(R.layout.activity_main) {
+abstract class BaseFragment<T : AppState, I : IInteractor<DictionaryResult>> :
+    Fragment(R.layout.fragment_main) {
 
     protected var isNetworkAvailable: Boolean = false
 
@@ -32,7 +32,7 @@ abstract class BaseActivity<T : AppState, I : IInteractor<DictionaryResult>> :
     abstract fun renderData(appState: T)
 
     protected fun noInternetMessageShow() {
-        Toast.makeText(baseContext, getString(R.string.no_internet_message), Toast.LENGTH_LONG)
+        Toast.makeText(requireContext(), getString(R.string.no_internet_message), Toast.LENGTH_LONG)
             .show()
     }
 }

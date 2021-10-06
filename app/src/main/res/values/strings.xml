@@ -9,4 +9,6 @@
     <string name="delete_description">X</string>
     <string name="find_description">F</string>
     <string name="no_internet_message">\"Отсутствует подключение к интернету. Проверьте настройки.\"</string>
+    <string name="bottom_menu_title_main">Переводчик</string>
+    <string name="menu_main">Переводчик</string>
 </resources>

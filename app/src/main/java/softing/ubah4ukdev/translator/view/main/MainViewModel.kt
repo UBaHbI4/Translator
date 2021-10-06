@@ -1,8 +1,6 @@
 package softing.ubah4ukdev.translator.view.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,30 +26,14 @@ import softing.ubah4ukdev.translator.viewmodel.BaseViewModel
 class MainViewModel constructor(
     private val interactor: MainInteractor,
     private val networkState: NetworkStateObservable,
-    private val state: SavedStateHandle
 ) : BaseViewModel<AppState>() {
 
     companion object {
-        private const val LAST_INPUT_WORD = "lastWord"
-        private const val LOG_TAG = "SavedStateHandleTest"
-
-        private const val TEXT_SAVE = "Save: "
-        private const val TEXT_RESTORE = "Restore: "
 
         //Задержка для экспериментов с корутинами
         private const val DELAY_LOADING = 1500L
 
         private const val EMPTY_RESULT_MESSAGE = "Отсутсвуют данные. Измените/повторите запрос."
-    }
-
-    fun saveLastWord(word: String) {
-        state.set(LAST_INPUT_WORD, word)
-        Log.d(LOG_TAG, "$TEXT_SAVE${word}")
-    }
-
-    fun getLastWord(): String {
-        Log.d(LOG_TAG, "$TEXT_RESTORE${state.get(LAST_INPUT_WORD) ?: ""}")
-        return state.get(LAST_INPUT_WORD) ?: ""
     }
 
     fun translateLiveData(): LiveData<AppState> {
@@ -91,7 +73,6 @@ class MainViewModel constructor(
         liveDataForViewToObserve.value = AppState.Success(null)
         super.onCleared()
     }
-
 
     override fun getNetworkState(): LiveData<Boolean> {
         compositeDisposable +=

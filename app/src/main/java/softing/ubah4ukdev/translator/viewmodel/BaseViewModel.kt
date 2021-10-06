@@ -1,5 +1,6 @@
 package softing.ubah4ukdev.translator.viewmodel
 
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,7 @@ abstract class BaseViewModel<T : AppState>(
     protected val liveDataForViewToObserve: MutableLiveData<T> = MutableLiveData(),
     protected val compositeDisposable: CompositeDisposable = CompositeDisposable(),
     protected val liveDataForNetworkState: MutableLiveData<Boolean> = MutableLiveData(),
-) : ViewModel() {
+) : ViewModel(), LifecycleObserver {
 
     companion object {
         private const val CANCEL_MESSAGE = "Уже не актуально."
