@@ -4,19 +4,12 @@
     android:id="@+id/error_frame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/margin_medium"
+    android:layout_gravity="top"
+    android:layout_marginVertical="@dimen/item_margin_vertical"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/extension_info"
-        style="@style/SmallTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_medium"
-        tools:text="Header" />
-
-    <TextView
-        android:id="@+id/header_textview_recycler_item"
+        android:id="@+id/header"
         style="@style/HeaderTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +17,7 @@
         tools:text="Header" />
 
     <TextView
-        android:id="@+id/description_textview_recycler_item"
+        android:id="@+id/description"
         style="@style/BaseTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

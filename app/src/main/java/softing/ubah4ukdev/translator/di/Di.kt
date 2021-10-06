@@ -1,5 +1,8 @@
 package softing.ubah4ukdev.translator.di
 
+import com.github.terrakok.cicerone.Cicerone
+import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.Router
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -47,7 +50,6 @@ object Di {
             MainViewModel(
                 interactor = get(),
                 networkState = get(),
-                state = get()
             )
         }
     }
@@ -110,6 +112,20 @@ object Di {
                 .addConverterFactory(GsonConverterFactory.create(get()))
                 .build()
                 .create(YandexApi::class.java)
+        }
+    }
+
+    fun navigationModule() = module {
+        single<Cicerone<Router>> {
+            Cicerone.create()
+        }
+
+        single<NavigatorHolder> {
+            get<Cicerone<Router>>().getNavigatorHolder()
+        }
+
+        single<Router> {
+            get<Cicerone<Router>>().router
         }
     }
 }

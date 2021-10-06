@@ -29,10 +29,8 @@ class WordViewHolder(
 
     fun bind(data: DictionaryEntry, delegate: WordAdapter.Delegate?) {
         with(binding) {
-            "${data.partOfSpeech} - [${data.transcription}]".also { extensionInfo.text = it }
-            headerTextviewRecyclerItem.text = data.text
-            descriptionTextviewRecyclerItem.text =
-                data.translatesList.joinToString(separator = "\n")
+            header.text = data.text
+            description.text = data.translatesList[0].text
             binding.root.click { delegate?.onItemPicked(data) }
         }
     }
