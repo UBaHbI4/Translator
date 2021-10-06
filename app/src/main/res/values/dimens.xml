@@ -30,4 +30,5 @@
     <dimen name="activity_main_success_frame_margin_top">60dp</dimen>
     <dimen name="main_error_text_margin_horizontal">10dp</dimen>
     <dimen name="zero">0dp</dimen>
+    <dimen name="item_margin_vertical">3dp</dimen>
 </resources>
