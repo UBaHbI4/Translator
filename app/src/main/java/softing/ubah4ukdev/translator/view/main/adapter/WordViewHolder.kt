@@ -3,8 +3,8 @@ package softing.ubah4ukdev.translator.view.main.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
-import softing.ubah4ukdev.translator.databinding.RecyclerViewItemBinding
-import softing.ubah4ukdev.translator.domain.model.DictionaryEntry
+import softing.ubah4ukdev.translator.databinding.MainItemBinding
+import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
 import softing.ubah4ukdev.translator.extensions.click
 
 /**
@@ -25,13 +25,14 @@ class WordViewHolder(
     view: View
 ) : RecyclerView.ViewHolder(view) {
 
-    private val binding: RecyclerViewItemBinding by viewBinding()
+    private val binding: MainItemBinding by viewBinding()
 
-    fun bind(data: DictionaryEntry, delegate: WordAdapter.Delegate?) {
+    fun bind(data: WordTranslate, delegate: WordAdapter.Delegate?) {
         with(binding) {
-            header.text = data.text
-            description.text = data.translatesList[0].text
+            header.text = data.word
+            description.text = data.translate
             binding.root.click { delegate?.onItemPicked(data) }
+            binding.favourite.click { delegate?.onFavouritePicked(data) }
         }
     }
 }

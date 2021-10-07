@@ -1,6 +1,8 @@
 package softing.ubah4ukdev.translator.domain.repository.datasource
 
-import softing.ubah4ukdev.translator.domain.model.DictionaryResult
+import softing.ubah4ukdev.translator.domain.storage.WordStorage
+import softing.ubah4ukdev.translator.domain.storage.entity.WordFavourite
+import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
 
 /**
  *   Project: Translator
@@ -17,12 +19,48 @@ import softing.ubah4ukdev.translator.domain.model.DictionaryResult
  *
  *   v1.0
  */
-class CacheDataSourceImpl : IDataSource<DictionaryResult> {
-    companion object {
-        private const val ERROR_MESSAGE =
-            "Локальный источник данных еще не реализован.\nПопросите разработчика реализовать :)"
+class CacheDataSourceImpl(private val wordStorage: WordStorage) : IDataSourceLocal {
+
+    override suspend fun saveToDB(word: WordTranslate) {
+        wordStorage
+            .wordDao()
+            .insertWordToHistory(word)
     }
 
-    override suspend fun getData(word: String): DictionaryResult =
-        throw Exception(ERROR_MESSAGE)
+    override suspend fun saveToDB(words: List<WordTranslate>) {
+        wordStorage
+            .wordDao()
+            .insertWordsToHistory(words)
+    }
+
+    override suspend fun fetchHistory(): List<WordTranslate> =
+        wordStorage
+            .wordDao()
+            .fetchHistory()
+
+    override suspend fun findInHistoryByWord(word: String): WordTranslate =
+        wordStorage
+            .wordDao()
+            .findInHistoryByWord(word)
+
+    override suspend fun fetchFavourite(): List<WordFavourite> =
+        wordStorage
+            .wordDao()
+            .fetchFavourite()
+
+    override suspend fun insertWordToFavourite(word: WordFavourite): Long =
+        wordStorage
+            .wordDao()
+            .insertWordToFavourite(word)
+
+    override suspend fun clearFavourite(): Int =
+        wordStorage
+            .wordDao()
+            .clearFavourite()
+
+    override suspend fun clearHistory(): Int =
+        wordStorage
+            .wordDao()
+            .clearHistory()
+
 }

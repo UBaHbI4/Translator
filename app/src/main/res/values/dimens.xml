@@ -31,4 +31,15 @@
     <dimen name="main_error_text_margin_horizontal">10dp</dimen>
     <dimen name="zero">0dp</dimen>
     <dimen name="item_margin_vertical">3dp</dimen>
+    <dimen name="alert_find_input_margin_top">16dp</dimen>
+    <dimen name="alert_find_input_margin_horizontal">8dp</dimen>
+    <dimen name="alert_find_input_margin_bottom">4dp</dimen>
+    <dimen name="detail_image_size">100dp</dimen>
+    <dimen name="detail_default_margin">8dp</dimen>
+    <dimen name="detail_default_margin_top">5dp</dimen>
+    <dimen name="detail_translate_margin_top">20dp</dimen>
+    <dimen name="detail_transcription_margin_start">5dp</dimen>
+    <dimen name="favourite_icon_size">30dp</dimen>
+    <dimen name="favourite_icon_margin">2dp</dimen>
+    <item name="favourite_icon_alpha" format="float" type="dimen">0.4</item>
 </resources>

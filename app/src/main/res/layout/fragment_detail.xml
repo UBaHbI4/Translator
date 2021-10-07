@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.detail.DetailFragment">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_pos"
+            android:layout_width="@dimen/detail_image_size"
+            android:layout_height="@dimen/detail_image_size"
+            android:layout_margin="@dimen/detail_default_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/detail_default_margin"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/example_word" />
+
+        <TextView
+            android:id="@+id/transcription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/detail_transcription_margin_start"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="@id/word"
+            app:layout_constraintStart_toEndOf="@id/word"
+            app:layout_constraintTop_toTopOf="@id/word"
+            tools:text="@string/example_transcription" />
+
+        <TextView
+            android:id="@+id/translate"
+            android:layout_width="@dimen/zero"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/detail_default_margin"
+            android:layout_marginTop="@dimen/detail_translate_margin_top"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_pos"
+            tools:text="@string/example_translate" />
+
+        <TextView
+            android:id="@+id/pos"
+            android:layout_width="@dimen/zero"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/detail_default_margin"
+            android:layout_marginTop="@dimen/detail_default_margin_top"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/translate"
+            tools:text="@string/example_part_of_speech" />
+
+        <TextView
+            android:id="@+id/mean"
+            android:layout_width="@dimen/zero"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/detail_default_margin"
+            android:layout_marginTop="@dimen/detail_default_margin_top"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pos"
+            tools:text="@string/example_mean" />
+
+        <TextView
+            android:id="@+id/synonym"
+            android:layout_width="@dimen/zero"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/detail_default_margin"
+            android:layout_marginTop="@dimen/detail_default_margin_top"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mean"
+            tools:text="@string/example_synonym" />
+
+        <TextView
+            android:id="@+id/example"
+            android:layout_width="@dimen/zero"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/detail_default_margin"
+            android:layout_marginTop="@dimen/detail_default_margin_top"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/synonym"
+            tools:text="@string/example_example" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

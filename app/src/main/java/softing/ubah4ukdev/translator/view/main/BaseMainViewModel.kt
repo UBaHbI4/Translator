@@ -1,12 +1,12 @@
-package softing.ubah4ukdev.translator.viewmodel
+package softing.ubah4ukdev.translator.view.main
 
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 import softing.ubah4ukdev.translator.domain.model.AppState
+import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
 
 /**
  *   Project: Translator
@@ -22,11 +22,13 @@ import softing.ubah4ukdev.translator.domain.model.AppState
  *
  *   v1.0
  */
-abstract class BaseViewModel<T : AppState>(
-    protected val liveDataForViewToObserve: MutableLiveData<T> = MutableLiveData(),
+abstract class BaseMainViewModel<T : AppState>(
+    protected val translateLiveData: MutableLiveData<T> = MutableLiveData(),
     protected val compositeDisposable: CompositeDisposable = CompositeDisposable(),
-    protected val liveDataForNetworkState: MutableLiveData<Boolean> = MutableLiveData(),
-) : ViewModel(), LifecycleObserver {
+    protected val networkStateLiveData: MutableLiveData<Boolean> = MutableLiveData(),
+    protected val historyLiveData: MutableLiveData<T> = MutableLiveData(),
+    protected val favouritesLiveData: MutableLiveData<T> = MutableLiveData()
+) : ViewModel() {
 
     companion object {
         private const val CANCEL_MESSAGE = "Уже не актуально."
@@ -41,7 +43,11 @@ abstract class BaseViewModel<T : AppState>(
 
     abstract fun getData(word: String, isOnline: Boolean)
 
-    open fun getNetworkState(): LiveData<Boolean> = liveDataForNetworkState
+    abstract fun saveToFavourite(word: WordTranslate)
+
+    abstract fun findInHistory(word: String)
+
+    open fun getNetworkState(): LiveData<Boolean> = networkStateLiveData
 
     override fun onCleared() {
         super.onCleared()

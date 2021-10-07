@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/target_word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/alert_find_input_margin_horizontal"
+        android:layout_marginTop="@dimen/alert_find_input_margin_top"
+        android:layout_marginBottom="@dimen/alert_find_input_margin_bottom"
+        android:autofillHints=""
+        android:hint="@string/alert_find_hint"
+        android:inputType="text" />
+</LinearLayout>
