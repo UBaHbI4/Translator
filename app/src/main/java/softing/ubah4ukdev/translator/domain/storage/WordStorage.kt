@@ -22,7 +22,7 @@ import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
 @Database(
     exportSchema = true,
     entities = [WordTranslate::class, WordFavourite::class],
-    version = 13
+    version = 14
 )
 abstract class WordStorage : RoomDatabase() {
 
