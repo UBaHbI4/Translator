@@ -43,4 +43,13 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <!-- Стиль для элементов нижнего меню -->
+    <style name="NavigationBottomStyle">
+        <item name="itemTextColor">@drawable/nav_view_bottom_item_text_color</item>
+        <item name="itemBackground">@drawable/nav_view_bottom_item_background</item>
+        <item name="itemShapeFillColor">@drawable/nav_view_shape_color</item>
+        <item name="itemIconTint">@drawable/nav_view_shape_color</item>
+        <item name="backgroundTint">@color/transparent</item>
+    </style>
+
 </resources>

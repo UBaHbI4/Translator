@@ -22,4 +22,5 @@ interface IRepository<T> {
      * @return Observable<T>
      */
     suspend fun getData(word: String): T
+
 }

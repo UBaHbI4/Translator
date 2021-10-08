@@ -1,8 +1,6 @@
 package softing.ubah4ukdev.translator.domain.model
 
 import com.google.gson.annotations.SerializedName
-import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_TEXT
-import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_TRANSLATES_LIST
 
 /**
  *   Project: Translator
@@ -20,10 +18,10 @@ import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_TRANSLATE
  */
 data class Examples(
 
-    @SerializedName(MODEL_TEXT)
+    @SerializedName(ModelConstants.MODEL_TEXT)
     val text: String,
 
-    @SerializedName(MODEL_TRANSLATES_LIST)
+    @SerializedName(ModelConstants.MODEL_TRANSLATES_LIST)
     val translatesList: List<Translation>
 ) {
     override fun toString(): String {

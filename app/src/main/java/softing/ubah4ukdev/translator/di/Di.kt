@@ -1,5 +1,6 @@
 package softing.ubah4ukdev.translator.di
 
+import androidx.room.Room
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
@@ -20,10 +21,17 @@ import softing.ubah4ukdev.translator.domain.api.YandexApi
 import softing.ubah4ukdev.translator.domain.api.YandexApiInterceptor
 import softing.ubah4ukdev.translator.domain.model.DictionaryResult
 import softing.ubah4ukdev.translator.domain.repository.IRepository
+import softing.ubah4ukdev.translator.domain.repository.IRepositoryLocal
 import softing.ubah4ukdev.translator.domain.repository.RepositoryImpl
+import softing.ubah4ukdev.translator.domain.repository.RepositoryLocalImpl
 import softing.ubah4ukdev.translator.domain.repository.datasource.CacheDataSourceImpl
 import softing.ubah4ukdev.translator.domain.repository.datasource.NetworkDataSourceImpl
+import softing.ubah4ukdev.translator.domain.storage.WordStorage
 import softing.ubah4ukdev.translator.utils.network.NetworkStateObservable
+import softing.ubah4ukdev.translator.view.favourite.FavouriteInteractor
+import softing.ubah4ukdev.translator.view.favourite.FavouriteViewModel
+import softing.ubah4ukdev.translator.view.history.HistoryInteractor
+import softing.ubah4ukdev.translator.view.history.HistoryViewModel
 import softing.ubah4ukdev.translator.view.main.MainInteractor
 import softing.ubah4ukdev.translator.view.main.MainViewModel
 
@@ -42,8 +50,11 @@ import softing.ubah4ukdev.translator.view.main.MainViewModel
  *   v1.0
  */
 object Di {
-    private const val LOCAL = "LOCAL"
-    private const val REMOTE = "REMOTE"
+
+    private const val PERSISTED = "Persisted"
+    private const val IN_MEMORY = "InMemory"
+
+    private const val DATABASE_NAME = "translator_database"
 
     fun viewModelModule() = module {
         viewModel {
@@ -52,13 +63,33 @@ object Di {
                 networkState = get(),
             )
         }
+
+        viewModel {
+            HistoryViewModel(interactor = get())
+        }
+
+        viewModel {
+            FavouriteViewModel(interactor = get())
+        }
     }
 
     fun interactorModule() = module {
         factory {
             MainInteractor(
-                repositoryLocal = get(named(LOCAL)),
-                repositoryRemote = get(named(REMOTE))
+                repositoryLocal = get(),
+                repositoryRemote = get()
+            )
+        }
+
+        factory {
+            HistoryInteractor(
+                repositoryLocal = get(),
+            )
+        }
+
+        factory {
+            FavouriteInteractor(
+                repositoryLocal = get(),
             )
         }
     }
@@ -68,7 +99,7 @@ object Di {
     }
 
     fun repositoryModule() = module {
-        single<IRepository<DictionaryResult>>(qualifier = named(REMOTE)) {
+        single<IRepository<DictionaryResult>> {
             RepositoryImpl(
                 dataSource = NetworkDataSourceImpl(
                     yandexApi = get()
@@ -76,9 +107,9 @@ object Di {
             )
         }
 
-        single<IRepository<DictionaryResult>>(qualifier = named(LOCAL)) {
-            RepositoryImpl(
-                dataSource = CacheDataSourceImpl()
+        single<IRepositoryLocal> {
+            RepositoryLocalImpl(
+                dataSource = CacheDataSourceImpl(get(named(PERSISTED)))
             )
         }
     }
@@ -126,6 +157,20 @@ object Di {
 
         single<Router> {
             get<Cicerone<Router>>().router
+        }
+    }
+
+    fun storageModule() = module {
+        single<WordStorage>(qualifier = named(PERSISTED)) {
+            Room.databaseBuilder(androidContext(), WordStorage::class.java, DATABASE_NAME)
+                .fallbackToDestructiveMigration()
+                .build()
+        }
+
+        single<WordStorage>(qualifier = named(IN_MEMORY)) {
+            Room.inMemoryDatabaseBuilder(androidContext(), WordStorage::class.java)
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
 }

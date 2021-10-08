@@ -4,4 +4,14 @@
         android:id="@+id/navigation_main"
         android:icon="@drawable/ic_bottom_menu_main"
         android:title="@string/bottom_menu_title_main" />
+
+    <item
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/ic_bottom_menu_history"
+        android:title="@string/bottom_menu_title_history" />
+
+    <item
+        android:id="@+id/navigation_favourite"
+        android:icon="@drawable/ic_bottom_menu_favourite"
+        android:title="@string/bottom_menu_title_favourite" />
 </menu>

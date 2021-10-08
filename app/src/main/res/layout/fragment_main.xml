@@ -63,7 +63,7 @@
         android:gravity="center">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/main_activity_recyclerview"
+            android:id="@+id/main_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

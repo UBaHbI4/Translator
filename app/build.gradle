@@ -28,6 +28,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -68,6 +74,10 @@ dependencies {
     implementation "com.google.android.material:material:$android_material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.legacy:legacy-support-v4:$legasy_version"
+
     // ViewBindingPropertyDelegate
     implementation "com.github.kirich1409:viewbindingpropertydelegate:$viewbinding_delegate_version"
 
@@ -87,7 +97,6 @@ dependencies {
     implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-android-compat:$koin_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation "io.insert-koin:koin-test:$koin_version"
     testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
 
@@ -95,8 +104,20 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    //Cicerone
+    // Cicerone
     implementation "com.github.terrakok:cicerone:$cicerone_version"
+
+    // Room
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // Glide
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    implementation "com.github.bumptech.glide:okhttp3-integration:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     // Tests
     testImplementation "junit:junit:$junit_version"

@@ -1,7 +1,6 @@
 package softing.ubah4ukdev.translator.domain.model
 
 import com.google.gson.annotations.SerializedName
-import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_DICTIONARY_ENTRY_LIST
 
 /**
  *   Project: Translator
@@ -19,6 +18,6 @@ import softing.ubah4ukdev.translator.domain.model.ModelConstants.MODEL_DICTIONAR
  */
 data class DictionaryResult(
 
-    @SerializedName(MODEL_DICTIONARY_ENTRY_LIST)
+    @SerializedName(ModelConstants.MODEL_DICTIONARY_ENTRY_LIST)
     val dictionaryEntryList: List<DictionaryEntry>
 )
