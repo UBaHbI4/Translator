@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import softing.ubah4ukdev.domain.storage.entity.WordTranslate
 import softing.ubah4ukdev.translator.R
-import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
 
 /**
  *   Project: Translator

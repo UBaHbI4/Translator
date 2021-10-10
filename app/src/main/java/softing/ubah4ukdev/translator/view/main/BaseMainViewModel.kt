@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
-import softing.ubah4ukdev.translator.domain.model.AppState
-import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
+import softing.ubah4ukdev.domain.storage.entity.WordTranslate
+import softing.ubah4ukdev.model.data.AppState
 
 /**
  *   Project: Translator
@@ -37,7 +37,7 @@ abstract class BaseMainViewModel<T : AppState>(
     protected val viewModelCoroutineScope = CoroutineScope(
         Dispatchers.IO
                 + SupervisorJob()
-                + CoroutineExceptionHandler { coroutineContext, throwable ->
+                + CoroutineExceptionHandler { _, throwable ->
             handleError(throwable)
         })
 

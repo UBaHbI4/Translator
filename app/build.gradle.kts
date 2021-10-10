@@ -16,7 +16,7 @@ android {
         create("finalSign")
         {
             val properties = Properties()
-            properties.load(FileInputStream(project.rootProject.file("api.properties")))
+            properties.load(FileInputStream(file( "./../api.properties")))
             storeFile = file("./../AppTranslatorKey.jks")
             storePassword = properties.getProperty("storePassword", "")
             keyAlias = properties.getProperty("keyAlias", "")
@@ -44,12 +44,6 @@ android {
         versionName = Config.VERSION_NAME
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments["room.schemaLocation"] = "$projectDir/schemas"
-            }
-        }
     }
 
     compileOptions {
@@ -65,15 +59,21 @@ android {
 
     buildTypes.forEach {
         val properties = Properties()
-        properties.load(FileInputStream(project.rootProject.file("api.properties")))
-        val appToken = properties.getProperty("token", "")
-        it.buildConfigField("String", "API_TOKEN", appToken)
+        properties.load(FileInputStream(file( "./../api.properties")))
         val urlBase = properties.getProperty("base_url", "")
         it.buildConfigField("String", "BASE_URL", urlBase)
     }
+
 }
 
 dependencies {
+
+    implementation(project(Modules.MODULE_MODEL))
+    implementation(project(Modules.MODULE_DOMAIN))
+    implementation(project(Modules.MODULE_UTILS))
+    implementation(project(Modules.SCREEN_HISTORY))
+    implementation(project(Modules.SCREEN_FAVOURITE))
+    implementation(project(Modules.SCREEN_DETAIL))
 
     // Design
     implementation(Design.APPCOMPAT)

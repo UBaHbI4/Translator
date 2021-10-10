@@ -6,10 +6,10 @@ import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import org.koin.android.ext.android.inject
+import softing.ubah4ukdev.screenfavourite.FavouriteScreen
+import softing.ubah4ukdev.screenhistory.HistoryScreen
 import softing.ubah4ukdev.translator.R
 import softing.ubah4ukdev.translator.databinding.ActivityMainBinding
-import softing.ubah4ukdev.translator.view.favourite.FavouriteScreen
-import softing.ubah4ukdev.translator.view.history.HistoryScreen
 import softing.ubah4ukdev.translator.view.main.MainScreen
 
 class MainActivity : AppCompatActivity() {

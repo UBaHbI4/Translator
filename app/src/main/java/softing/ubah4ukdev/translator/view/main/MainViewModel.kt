@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import softing.ubah4ukdev.translator.domain.model.AppState
-import softing.ubah4ukdev.translator.domain.model.DictionaryResult
-import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
-import softing.ubah4ukdev.translator.utils.mapToListWordTranslate
-import softing.ubah4ukdev.translator.utils.mapTranslateToFavourite
-import softing.ubah4ukdev.translator.utils.network.NetworkState
-import softing.ubah4ukdev.translator.utils.network.NetworkStateObservable
+import softing.ubah4ukdev.domain.storage.entity.WordTranslate
+import softing.ubah4ukdev.model.data.AppState
+import softing.ubah4ukdev.model.data.DictionaryResult
+import softing.ubah4ukdev.utils.mapToListWordTranslate
+import softing.ubah4ukdev.utils.mapTranslateToFavourite
+import softing.ubah4ukdev.utils.network.NetworkState
+import softing.ubah4ukdev.utils.network.NetworkStateObservable
 
 /**
  *   Project: Translator

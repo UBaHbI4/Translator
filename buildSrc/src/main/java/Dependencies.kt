@@ -9,19 +9,29 @@ object Config {
     const val VERSION_CODE = 1
     const val VERSION_NAME = " Full version"
     const val JVM_TARGET = "1.8"
-    val java_version = JavaVersion.VERSION_1_8
+    val java_version = JavaVersion.VERSION_11
 }
 
+object Modules {
+    const val MODULE_MODEL = ":model"
+    const val MODULE_DOMAIN = ":domain"
+    const val MODULE_UTILS = ":utils"
+
+    const val SCREEN_DETAIL = ":screendetail"
+    const val SCREEN_HISTORY = ":screenhistory"
+    const val SCREEN_FAVOURITE = ":screenfavourite"
+}
+
+
 object LibVersion {
-    const val KOTLIN_VERSION = "1.5.31"
     const val KOTLIN_STDLIB_VERSION = "kotlin-stdlib-jdk8:1.5.31"
     const val GRADLE_VERSION = "7.0.2"
+    const val GRADLE_PLUGIN_VERSION = "kotlin-gradle-plugin:1.5.31"
     const val CORE_KTX_VERSION = "1.6.0"
     const val APPCOMPAT_VERSION = "1.3.1"
     const val ANDROID_MATERIAL_VERSION = "1.4.0"
     const val CONSTRAINT_LAYOUT_VERSION = "2.1.1"
     const val LIFECYCLE_VERSION = "2.3.1"
-    const val LEGACY_VERSION = "1.0.0"
 
     // ViewBindingPropertyDelegate
     const val VIEW_BINDING_DELEGATE_VERSION = "1.5.0-beta01"
