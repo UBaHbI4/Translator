@@ -25,14 +25,18 @@ import softing.ubah4ukdev.domain.repository.RepositoryLocalImpl
 import softing.ubah4ukdev.domain.repository.datasource.CacheDataSourceImpl
 import softing.ubah4ukdev.domain.repository.datasource.NetworkDataSourceImpl
 import softing.ubah4ukdev.domain.storage.WordStorage
-import softing.ubah4ukdev.translator.BuildConfig
 import softing.ubah4ukdev.model.data.DictionaryResult
+import softing.ubah4ukdev.screenfavourite.FavouriteFragment
 import softing.ubah4ukdev.screenfavourite.FavouriteInteractor
 import softing.ubah4ukdev.screenfavourite.FavouriteViewModel
+import softing.ubah4ukdev.screenhistory.HistoryFragment
 import softing.ubah4ukdev.screenhistory.HistoryInteractor
 import softing.ubah4ukdev.screenhistory.HistoryViewModel
+import softing.ubah4ukdev.translator.BuildConfig
+import softing.ubah4ukdev.translator.view.main.MainFragment
 import softing.ubah4ukdev.translator.view.main.MainInteractor
 import softing.ubah4ukdev.translator.view.main.MainViewModel
+import softing.ubah4ukdev.utils.Di.DiConst
 import softing.ubah4ukdev.utils.network.NetworkStateObservable
 
 /**
@@ -57,19 +61,25 @@ object Di {
     private const val DATABASE_NAME = "translator_database"
 
     fun viewModelModule() = module {
-        viewModel {
-            MainViewModel(
-                interactor = get(),
-                networkState = get(),
-            )
+        scope<MainFragment> {
+            viewModel(qualifier = named(DiConst.MAIN_VIEW_MODEL)) {
+                MainViewModel(
+                    interactor = get(),
+                    networkState = get(),
+                )
+            }
         }
 
-        viewModel {
-            HistoryViewModel(interactor = get())
+        scope<HistoryFragment> {
+            viewModel(qualifier = named(DiConst.HISTORY_VIEW_MODEL)) {
+                HistoryViewModel(interactor = get())
+            }
         }
 
-        viewModel {
-            FavouriteViewModel(interactor = get())
+        scope<FavouriteFragment> {
+            viewModel(qualifier = named(DiConst.FAVOURITE_VIEW_MODEL)) {
+                FavouriteViewModel(interactor = get())
+            }
         }
     }
 

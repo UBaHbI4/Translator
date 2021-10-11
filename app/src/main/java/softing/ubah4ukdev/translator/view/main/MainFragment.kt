@@ -16,9 +16,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.terrakok.cicerone.Router
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 import softing.ubah4ukdev.domain.storage.entity.WordTranslate
 import softing.ubah4ukdev.model.data.AppState
 import softing.ubah4ukdev.model.data.DictionaryResult
@@ -26,7 +28,10 @@ import softing.ubah4ukdev.screendetail.DetailScreen
 import softing.ubah4ukdev.translator.R
 import softing.ubah4ukdev.translator.databinding.FragmentMainBinding
 import softing.ubah4ukdev.translator.view.main.adapter.WordAdapter
+import softing.ubah4ukdev.utils.Di.DiConst
+import softing.ubah4ukdev.utils.extensions.showSnakeBar
 import softing.ubah4ukdev.utils.mapToListWordTranslate
+import softing.ubah4ukdev.utils.viewById
 
 /**
  *   Project: Translator
@@ -43,17 +48,15 @@ import softing.ubah4ukdev.utils.mapToListWordTranslate
  */
 class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
 
-    companion object {
-        private const val INPUT_METHOD_MANAGER_FLAGS = 0
-
-        fun newInstance(): Fragment = MainFragment()
-    }
+    private val scope = getKoin().createScope<MainFragment>()
 
     private var isNetworkAvailable: Boolean = false
     private lateinit var binding: FragmentMainBinding
-    private val model: MainViewModel by viewModel()
+    private val model: MainViewModel = scope.get(qualifier = named(name = DiConst.MAIN_VIEW_MODEL))
     private val router: Router by inject()
     private val wordAdapter by lazy { WordAdapter(this) }
+
+    private val mainRV by viewById<RecyclerView>(R.id.main_rv)
 
     private val textWatcher = object : TextWatcher {
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -108,6 +111,7 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
         model.translateLiveData().removeObservers(requireActivity())
         model.findHistoryLiveData().removeObservers(requireActivity())
         model.getNetworkState().removeObservers(requireActivity())
+
         init()
     }
 
@@ -157,25 +161,28 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
                 }
             }
 
-            with(mainRv) {
-                layoutManager =
-                    LinearLayoutManager(requireContext())
-                adapter = wordAdapter
-                itemAnimator = DefaultItemAnimator()
-                addItemDecoration(
-                    DividerItemDecoration(
-                        requireContext(),
-                        LinearLayoutManager.VERTICAL
-                    )
-                )
-            }
+
         }
 
-        model.networkStateLiveData().observe(requireActivity(), Observer<Boolean> {
+        with(mainRV) {
+            layoutManager =
+                LinearLayoutManager(requireContext())
+            adapter = wordAdapter
+            itemAnimator = DefaultItemAnimator()
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL
+                )
+            )
+        }
+
+        model.networkStateLiveData().observe(viewLifecycleOwner, Observer<Boolean> {
             isNetworkAvailable = it
+            binding.root.showSnakeBar(String.format(getString(R.string.internet_active), it))
         })
         model.getNetworkState()
-        model.translateLiveData().observe(requireActivity(), Observer<AppState> {
+        model.translateLiveData().observe(viewLifecycleOwner, Observer<AppState> {
             when (it) {
                 is AppState.Success -> {
                     if (it.data == null || (it.data as DictionaryResult).dictionaryEntryList.isEmpty()) {
@@ -207,7 +214,7 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
             }
         })
 
-        model.findHistoryLiveData().observe(requireActivity(), Observer<AppState>
+        model.findHistoryLiveData().observe(viewLifecycleOwner, Observer<AppState>
         {
             when (it) {
                 is AppState.Success -> {
@@ -245,7 +252,7 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
             }
         })
 
-        model.favouriteLiveData().observe(requireActivity(), Observer<AppState> {
+        model.favouriteLiveData().observe(viewLifecycleOwner, Observer<AppState> {
             when (it) {
                 is AppState.Success -> {
                     if ((it?.data as Long) > 0) {
@@ -388,5 +395,11 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
 
     private fun showMessage(toast: () -> Unit) {
         toast()
+    }
+
+    companion object {
+        private const val INPUT_METHOD_MANAGER_FLAGS = 0
+
+        fun newInstance(): Fragment = MainFragment()
     }
 }
