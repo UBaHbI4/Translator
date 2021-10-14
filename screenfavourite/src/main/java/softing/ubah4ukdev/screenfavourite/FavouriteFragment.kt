@@ -10,22 +10,23 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.terrakok.cicerone.Router
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 import softing.ubah4ukdev.domain.storage.entity.WordFavourite
 import softing.ubah4ukdev.model.data.AppState
 import softing.ubah4ukdev.screendetail.DetailScreen
 import softing.ubah4ukdev.screenfavourite.adapter.FavouriteWordAdapter
 import softing.ubah4ukdev.screenfavourite.databinding.FragmentFavouriteBinding
+import softing.ubah4ukdev.utils.Di.DiConst
 import softing.ubah4ukdev.utils.mapFavouriteToTranslate
 
 class FavouriteFragment : Fragment(R.layout.fragment_favourite), FavouriteWordAdapter.Delegate {
 
-    companion object {
-        fun newInstance() = FavouriteFragment()
-    }
+    private val scope = getKoin().createScope<FavouriteFragment>()
 
-    private val model: FavouriteViewModel by viewModel()
+    private val model: FavouriteViewModel =
+        scope.get(qualifier = named(name = DiConst.FAVOURITE_VIEW_MODEL))
     private lateinit var binding: FragmentFavouriteBinding
     private val favouriteWordAdapter by lazy { FavouriteWordAdapter(this) }
     private val router: Router by inject()
@@ -188,5 +189,9 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite), FavouriteWordAd
                 )
             )
         )
+    }
+
+    companion object {
+        fun newInstance() = FavouriteFragment()
     }
 }

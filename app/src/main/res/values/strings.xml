@@ -36,4 +36,5 @@
     <string name="example_mean">Используется</string>
     <string name="example_synonym">Синонимы</string>
     <string name="example_example">Примеры</string>
+    <string name="internet_active">Internet is available: %s</string>
 </resources>

@@ -10,22 +10,23 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.terrakok.cicerone.Router
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 import softing.ubah4ukdev.domain.storage.entity.WordTranslate
 import softing.ubah4ukdev.model.data.AppState
 import softing.ubah4ukdev.screendetail.DetailScreen
 import softing.ubah4ukdev.screenhistory.adapter.HistoryWordAdapter
 import softing.ubah4ukdev.screenhistory.databinding.FragmentHistoryBinding
+import softing.ubah4ukdev.utils.Di.DiConst
 
 class HistoryFragment : Fragment(R.layout.fragment_history), HistoryWordAdapter.Delegate {
 
-    companion object {
-        fun newInstance() = HistoryFragment()
-    }
+    private val scope = getKoin().createScope<HistoryFragment>()
 
     private lateinit var binding: FragmentHistoryBinding
-    private val model: HistoryViewModel by viewModel()
+    private val model: HistoryViewModel =
+        scope.get(qualifier = named(name = DiConst.HISTORY_VIEW_MODEL))
     private val historyWordAdapter by lazy { HistoryWordAdapter(this) }
     private val router: Router by inject()
 
@@ -175,5 +176,9 @@ class HistoryFragment : Fragment(R.layout.fragment_history), HistoryWordAdapter.
 
     override fun onItemPicked(word: WordTranslate) {
         router.navigateTo(DetailScreen(word = word))
+    }
+
+    companion object {
+        fun newInstance() = HistoryFragment()
     }
 }
