@@ -1,8 +1,13 @@
 package softing.ubah4ukdev.translator.view.main
 
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
+
+import android.content.Intent
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -28,8 +33,8 @@ import softing.ubah4ukdev.screendetail.DetailScreen
 import softing.ubah4ukdev.translator.R
 import softing.ubah4ukdev.translator.databinding.FragmentMainBinding
 import softing.ubah4ukdev.translator.view.main.adapter.WordAdapter
+import softing.ubah4ukdev.translator.view.widget.AppWidget
 import softing.ubah4ukdev.utils.Di.DiConst
-import softing.ubah4ukdev.utils.extensions.showSnakeBar
 import softing.ubah4ukdev.utils.mapToListWordTranslate
 import softing.ubah4ukdev.utils.viewById
 
@@ -113,6 +118,8 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
         model.getNetworkState().removeObservers(requireActivity())
 
         init()
+
+        binding.searchEditText.requestFocus();
     }
 
     override fun onPause() {
@@ -128,11 +135,11 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
                     if (view.text.isNotEmpty()) {
                         if (isNetworkAvailable) {
                             model.getData(view.text.toString(), isNetworkAvailable)
-                            hideKeyboardForTextView()
+                            visibleKeyboardForTextView()
                             true
                         } else {
                             wordAdapter.clear()
-                            hideKeyboardForTextView()
+                            visibleKeyboardForTextView()
                             noInternetMessageShow()
                             false
                         }
@@ -153,15 +160,13 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
             find.setOnClickListener {
                 if (isNetworkAvailable) {
                     model.getData(binding.searchEditText.text.toString(), isNetworkAvailable)
-                    hideKeyboardForTextView()
+                    visibleKeyboardForTextView()
                 } else {
-                    hideKeyboardForTextView()
+                    visibleKeyboardForTextView()
                     wordAdapter.clear()
                     noInternetMessageShow()
                 }
             }
-
-
         }
 
         with(mainRV) {
@@ -179,7 +184,6 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
 
         model.networkStateLiveData().observe(viewLifecycleOwner, Observer<Boolean> {
             isNetworkAvailable = it
-            binding.root.showSnakeBar(String.format(getString(R.string.internet_active), it))
         })
         model.getNetworkState()
         model.translateLiveData().observe(viewLifecycleOwner, Observer<AppState> {
@@ -191,6 +195,15 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
                         showViewSuccess()
                         wordAdapter.setData(ArrayList(mapToListWordTranslate(it.data as DictionaryResult)))
                         model.saveToHistory(it.data as DictionaryResult)
+                        sendWordToWidget(
+                            (it.data as DictionaryResult)
+                                .dictionaryEntryList[0]
+                                .text,
+                            (it.data as DictionaryResult)
+                                .dictionaryEntryList[0]
+                                .translatesList[0]
+                                .text
+                        )
                     }
                 }
                 is AppState.Loading -> {
@@ -336,14 +349,14 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
             else -> false
         }
 
-    private fun hideKeyboardForTextView() {
+    private fun visibleKeyboardForTextView() {
         val view = requireActivity().currentFocus
         view?.let {
             val inputMethodManager = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as
                     InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(it.windowToken, INPUT_METHOD_MANAGER_FLAGS)
+            (it as? TextView)?.clearFocus()
         }
-        (view as? TextView)?.clearFocus()
     }
 
     private fun showErrorScreen(error: String?) {
@@ -352,13 +365,15 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
         binding.reloadButton.setOnClickListener {
             if (isNetworkAvailable) {
                 model.getData(binding.searchEditText.text.toString(), isNetworkAvailable)
-                hideKeyboardForTextView()
+                visibleKeyboardForTextView()
             } else {
-                hideKeyboardForTextView()
+                visibleKeyboardForTextView()
                 wordAdapter.clear()
                 noInternetMessageShow()
             }
         }
+        binding.searchInputLayout.setRenderEffect(null)
+        mainRV.setRenderEffect(null)
     }
 
     private fun showViewSuccess() {
@@ -366,14 +381,18 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
             successFrame.isVisible = true
             loadingFrame.isVisible = false
             errorFrame.isVisible = false
+            searchInputLayout.setRenderEffect(null)
+            mainRV.setRenderEffect(null)
         }
     }
 
     private fun showViewLoading() {
+        val blurEffect = RenderEffect.createBlurEffect(16f, 16f, Shader.TileMode.CLAMP)
         with(binding) {
-            successFrame.isVisible = false
             loadingFrame.isVisible = true
             errorFrame.isVisible = false
+            searchInputLayout.setRenderEffect(blurEffect)
+            mainRV.setRenderEffect(blurEffect)
         }
     }
 
@@ -397,9 +416,26 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
         toast()
     }
 
+    private fun sendWordToWidget(word: String, translate: String) {
+        val intent = Intent(context, AppWidget::class.java)
+        intent.action = WIDGET_ACTION
+        intent.putExtra(INTENT_PUT_EXTRA_NAME, word)
+        intent.putExtra(INTENT_PUT_EXTRA_VALUE, translate)
+        PendingIntent.getBroadcast(
+            requireContext(),
+            REQUEST_CODE,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+            .send()
+    }
+
     companion object {
         private const val INPUT_METHOD_MANAGER_FLAGS = 0
-
+        private const val WIDGET_ACTION = "android.appwidget.action.APPWIDGET_UPDATE"
+        private const val REQUEST_CODE = 12
+        const val INTENT_PUT_EXTRA_NAME = "word"
+        const val INTENT_PUT_EXTRA_VALUE = "translate"
         fun newInstance(): Fragment = MainFragment()
     }
 }

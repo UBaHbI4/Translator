@@ -129,6 +129,9 @@ dependencies {
     implementation(Glide.GLIDE_OKHTTP3)
     kapt(Glide.COMPILER)
 
+    // Splash screen Android 12
+    implementation(Design.SPLASH_SCREEN)
+
     // Tests
     testImplementation(Tests.JUNIT)
     androidTestImplementation(Tests.TEST_EXT_JUNIT)
