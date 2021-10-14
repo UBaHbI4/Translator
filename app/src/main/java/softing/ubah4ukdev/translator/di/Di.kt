@@ -16,24 +16,24 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import softing.ubah4ukdev.domain.api.YandexApi
+import softing.ubah4ukdev.domain.api.YandexApiInterceptor
+import softing.ubah4ukdev.domain.repository.IRepository
+import softing.ubah4ukdev.domain.repository.IRepositoryLocal
+import softing.ubah4ukdev.domain.repository.RepositoryImpl
+import softing.ubah4ukdev.domain.repository.RepositoryLocalImpl
+import softing.ubah4ukdev.domain.repository.datasource.CacheDataSourceImpl
+import softing.ubah4ukdev.domain.repository.datasource.NetworkDataSourceImpl
+import softing.ubah4ukdev.domain.storage.WordStorage
 import softing.ubah4ukdev.translator.BuildConfig
-import softing.ubah4ukdev.translator.domain.api.YandexApi
-import softing.ubah4ukdev.translator.domain.api.YandexApiInterceptor
-import softing.ubah4ukdev.translator.domain.model.DictionaryResult
-import softing.ubah4ukdev.translator.domain.repository.IRepository
-import softing.ubah4ukdev.translator.domain.repository.IRepositoryLocal
-import softing.ubah4ukdev.translator.domain.repository.RepositoryImpl
-import softing.ubah4ukdev.translator.domain.repository.RepositoryLocalImpl
-import softing.ubah4ukdev.translator.domain.repository.datasource.CacheDataSourceImpl
-import softing.ubah4ukdev.translator.domain.repository.datasource.NetworkDataSourceImpl
-import softing.ubah4ukdev.translator.domain.storage.WordStorage
-import softing.ubah4ukdev.translator.utils.network.NetworkStateObservable
-import softing.ubah4ukdev.translator.view.favourite.FavouriteInteractor
-import softing.ubah4ukdev.translator.view.favourite.FavouriteViewModel
-import softing.ubah4ukdev.translator.view.history.HistoryInteractor
-import softing.ubah4ukdev.translator.view.history.HistoryViewModel
+import softing.ubah4ukdev.model.data.DictionaryResult
+import softing.ubah4ukdev.screenfavourite.FavouriteInteractor
+import softing.ubah4ukdev.screenfavourite.FavouriteViewModel
+import softing.ubah4ukdev.screenhistory.HistoryInteractor
+import softing.ubah4ukdev.screenhistory.HistoryViewModel
 import softing.ubah4ukdev.translator.view.main.MainInteractor
 import softing.ubah4ukdev.translator.view.main.MainViewModel
+import softing.ubah4ukdev.utils.network.NetworkStateObservable
 
 /**
  *   Project: Translator
@@ -109,7 +109,11 @@ object Di {
 
         single<IRepositoryLocal> {
             RepositoryLocalImpl(
-                dataSource = CacheDataSourceImpl(get(named(PERSISTED)))
+                dataSource = CacheDataSourceImpl(
+                    get(
+                        named(PERSISTED)
+                    )
+                )
             )
         }
     }

@@ -19,14 +19,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.terrakok.cicerone.Router
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import softing.ubah4ukdev.domain.storage.entity.WordTranslate
+import softing.ubah4ukdev.model.data.AppState
+import softing.ubah4ukdev.model.data.DictionaryResult
+import softing.ubah4ukdev.screendetail.DetailScreen
 import softing.ubah4ukdev.translator.R
 import softing.ubah4ukdev.translator.databinding.FragmentMainBinding
-import softing.ubah4ukdev.translator.domain.model.AppState
-import softing.ubah4ukdev.translator.domain.model.DictionaryResult
-import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
-import softing.ubah4ukdev.translator.utils.mapToListWordTranslate
-import softing.ubah4ukdev.translator.view.detail.DetailScreen
 import softing.ubah4ukdev.translator.view.main.adapter.WordAdapter
+import softing.ubah4ukdev.utils.mapToListWordTranslate
 
 /**
  *   Project: Translator
@@ -119,7 +119,7 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
     private fun init() {
         with(binding) {
             searchEditText.addTextChangedListener(textWatcher)
-            searchEditText.setOnEditorActionListener { view, actionId, event ->
+            searchEditText.setOnEditorActionListener { view, actionId, _ ->
                 if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH) {
                     if (view.text.isNotEmpty()) {
                         if (isNetworkAvailable) {
@@ -182,8 +182,8 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
                         showErrorScreen(getString(R.string.empty_server_response_on_success))
                     } else {
                         showViewSuccess()
-                        wordAdapter.setData(ArrayList(mapToListWordTranslate(it.data)))
-                        model.saveToHistory(it.data)
+                        wordAdapter.setData(ArrayList(mapToListWordTranslate(it.data as DictionaryResult)))
+                        model.saveToHistory(it.data as DictionaryResult)
                     }
                 }
                 is AppState.Loading -> {
@@ -192,7 +192,9 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
                         if (it.progress != null) {
                             progressBarHorizontal.isVisible = true
                             progressBarRound.isVisible = false
-                            progressBarHorizontal.progress = it.progress
+                            it.progress?.let { progress ->
+                                progressBarHorizontal.progress = progress
+                            }
                         } else {
                             progressBarHorizontal.isVisible = false
                             progressBarRound.isVisible = true
@@ -221,7 +223,9 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
                         if (it.progress != null) {
                             progressBarHorizontal.isVisible = true
                             progressBarRound.isVisible = false
-                            progressBarHorizontal.progress = it.progress
+                            it.progress?.let { progress ->
+                                progressBarHorizontal.progress = progress
+                            }
                         } else {
                             progressBarHorizontal.isVisible = false
                             progressBarRound.isVisible = true
@@ -261,7 +265,9 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
                         if (it.progress != null) {
                             progressBarHorizontal.isVisible = true
                             progressBarRound.isVisible = false
-                            progressBarHorizontal.progress = it.progress
+                            it.progress?.let { progress ->
+                                progressBarHorizontal.progress = progress
+                            }
                         } else {
                             progressBarHorizontal.isVisible = false
                             progressBarRound.isVisible = true
@@ -288,7 +294,7 @@ class MainFragment : Fragment(R.layout.fragment_main), WordAdapter.Delegate {
     }
 
     private fun search() {
-        val inflater: LayoutInflater = requireActivity().getLayoutInflater()
+        val inflater: LayoutInflater = requireActivity().layoutInflater
         val mView: View = inflater.inflate(R.layout.dialog_find_in_history, null)
         val text: TextView = mView.findViewById(R.id.target_word)
 

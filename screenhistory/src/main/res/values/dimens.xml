@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //Margins
+    <dimen name="hairline">1px</dimen>
+    <dimen name="margin_xxxx_small">2dp</dimen>
+    <dimen name="margin_xxx_small">3dp</dimen>
+    <dimen name="margin_xx_small">5dp</dimen>
+    <dimen name="margin_x_small">7dp</dimen>
+    <dimen name="margin_small">10dp</dimen>
+    <dimen name="margin_medium">15dp</dimen>
+    <dimen name="margin_x_medium">17dp</dimen>
+    <dimen name="margin_xx_medium">20dp</dimen>
+    <dimen name="margin_xxx_medium">0dp</dimen>
+    <dimen name="margin_large">30dp</dimen>
+    <dimen name="margin_x_large">35dp</dimen>
+    <dimen name="margin_xx_large">40dp</dimen>
+    <dimen name="margin_xxx_large">45dp</dimen>
+
+    //Text size
+    <dimen name="text_size_tip">10sp</dimen>
+    <dimen name="text_size_standard">17sp</dimen>
+    <dimen name="text_size_standard_header">20sp</dimen>
+    <dimen name="text_size_large">20sp</dimen>
+    <dimen name="text_size_small">13sp</dimen>
+
+    //Corner radius
+    <dimen name="bottom_sheet_dialog_corner_radius">10dp</dimen>
+    <dimen name="activity_main_clear_text_margin_end">45dp</dimen>
+    <dimen name="activity_main_find_margin_end">10dp</dimen>
+    <dimen name="activity_main_success_frame_margin_top">60dp</dimen>
+    <dimen name="main_error_text_margin_horizontal">10dp</dimen>
+    <dimen name="zero">0dp</dimen>
+    <dimen name="item_margin_vertical">3dp</dimen>
+    <dimen name="alert_find_input_margin_top">16dp</dimen>
+    <dimen name="alert_find_input_margin_horizontal">8dp</dimen>
+    <dimen name="alert_find_input_margin_bottom">4dp</dimen>
+    <dimen name="detail_image_size">100dp</dimen>
+    <dimen name="detail_default_margin">8dp</dimen>
+    <dimen name="detail_default_margin_top">5dp</dimen>
+    <dimen name="detail_translate_margin_top">20dp</dimen>
+    <dimen name="detail_transcription_margin_start">5dp</dimen>
+    <dimen name="favourite_icon_size">30dp</dimen>
+    <dimen name="favourite_icon_margin">2dp</dimen>
+    <item name="favourite_icon_alpha" format="float" type="dimen">0.4</item>
+</resources>

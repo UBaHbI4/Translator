@@ -1,10 +1,10 @@
 package softing.ubah4ukdev.translator.view.main
 
-import softing.ubah4ukdev.translator.domain.model.DictionaryResult
-import softing.ubah4ukdev.translator.domain.repository.IRepository
-import softing.ubah4ukdev.translator.domain.repository.IRepositoryLocal
-import softing.ubah4ukdev.translator.domain.storage.entity.WordFavourite
-import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
+import softing.ubah4ukdev.domain.repository.IRepository
+import softing.ubah4ukdev.domain.repository.IRepositoryLocal
+import softing.ubah4ukdev.domain.storage.entity.WordFavourite
+import softing.ubah4ukdev.domain.storage.entity.WordTranslate
+import softing.ubah4ukdev.model.data.DictionaryResult
 
 /**
  *   Project: Translator

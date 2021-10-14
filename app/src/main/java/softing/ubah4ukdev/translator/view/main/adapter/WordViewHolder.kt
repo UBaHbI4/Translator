@@ -3,9 +3,9 @@ package softing.ubah4ukdev.translator.view.main.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
+import softing.ubah4ukdev.domain.storage.entity.WordTranslate
 import softing.ubah4ukdev.translator.databinding.MainItemBinding
-import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
-import softing.ubah4ukdev.translator.extensions.click
+import softing.ubah4ukdev.utils.extensions.click
 
 /**
  *   Project: Translator

@@ -1,7 +1,7 @@
 package softing.ubah4ukdev.translator.view.main
 
-import softing.ubah4ukdev.translator.domain.storage.entity.WordFavourite
-import softing.ubah4ukdev.translator.domain.storage.entity.WordTranslate
+import softing.ubah4ukdev.domain.storage.entity.WordFavourite
+import softing.ubah4ukdev.domain.storage.entity.WordTranslate
 
 /**
  *   Project: Translator
