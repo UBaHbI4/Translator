@@ -31,13 +31,6 @@ class MainViewModel(
     private val networkState: NetworkStateObservable,
 ) : BaseMainViewModel<AppState>() {
 
-    companion object {
-        //Задержка для экспериментов с корутинами
-        private const val DELAY_LOADING = 300L
-
-        private const val EMPTY_RESULT_MESSAGE = "Отсутсвуют данные. Измените/повторите запрос."
-    }
-
     fun translateLiveData(): LiveData<AppState> {
         return translateLiveData
     }
@@ -132,5 +125,12 @@ class MainViewModel(
         cancelJob()
         compositeDisposable.clear()
         historyLiveData.postValue(AppState.Success(null))
+    }
+
+    companion object {
+        //Задержка для экспериментов с корутинами
+        private const val DELAY_LOADING = 0L
+
+        private const val EMPTY_RESULT_MESSAGE = "Отсутсвуют данные. Измените/повторите запрос."
     }
 }

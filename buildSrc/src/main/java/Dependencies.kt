@@ -2,10 +2,10 @@ import org.gradle.api.JavaVersion
 
 object Config {
     const val APPLICATION_ID = "softing.ubah4ukdev.translator"
-    const val COMPILE_SDK = 30
+    const val COMPILE_SDK = 31
     const val BUILD_TOOLS = "30.0.2"
-    const val MIN_SDK_VERSION = 26
-    const val TARGET_SDK = 30
+    const val MIN_SDK_VERSION = 31
+    const val TARGET_SDK = 31
     const val VERSION_CODE = 1
     const val VERSION_NAME = " Full version"
     const val JVM_TARGET = "1.8"
@@ -62,6 +62,9 @@ object LibVersion {
     // Glide
     const val GLIDE_VERSION = "4.12.0"
 
+    // Splash screen Android 12
+    const val SPLASH_SCREEN_VERSION = "1.0.0-alpha02"
+
     // Tests
     const val JUNIT_VERSION = "4.13.2"
     const val TEST_EXT_JUNIT_VERSION = "1.1.3"
@@ -98,6 +101,7 @@ object Design {
     const val APPCOMPAT = "androidx.appcompat:appcompat:${LibVersion.APPCOMPAT_VERSION}"
     const val MATERIAL = "com.google.android.material:material:${LibVersion.ANDROID_MATERIAL_VERSION}"
     const val CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout:${LibVersion.CONSTRAINT_LAYOUT_VERSION}"
+    const val SPLASH_SCREEN = "androidx.core:core-splashscreen:${LibVersion.SPLASH_SCREEN_VERSION}"
 }
 
 object Kotlin {

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -18,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/search_hint"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/color_black">
+            android:textColorHint="@color/colorPrimaryDark"
+            app:hintTextColor="@color/colorPrimaryDark">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/search_edit_text"
@@ -38,7 +37,7 @@
             android:contentDescription="@string/delete_description"
             android:src="@drawable/ic_clear"
             android:visibility="gone"
-            app:tint="@color/white"
+            app:tint="@color/colorPrimaryDark"
             tools:visibility="visible" />
 
         <ImageView
@@ -51,7 +50,7 @@
             android:enabled="false"
             android:src="@drawable/ic_find"
             android:visibility="visible"
-            app:tint="@color/white"
+            app:tint="@color/colorPrimaryDark"
             tools:visibility="visible" />
     </FrameLayout>
 
@@ -110,4 +109,5 @@
             android:layout_height="wrap_content"
             android:text="@string/reload_button" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
