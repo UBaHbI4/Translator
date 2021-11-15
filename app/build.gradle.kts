@@ -128,9 +128,4 @@ dependencies {
     implementation(Glide.GLIDE)
     implementation(Glide.GLIDE_OKHTTP3)
     kapt(Glide.COMPILER)
-
-    // Tests
-    testImplementation(Tests.JUNIT)
-    androidTestImplementation(Tests.TEST_EXT_JUNIT)
-    androidTestImplementation(Tests.ESPRESSO)
 }
